@@ -223,15 +223,29 @@ eda <- function(x) {
 }
 
 examine <- function(data, cols) {
-  results <- tibble()
+  results <- c()
   
   for(i in 1:length(cols)) {
     results <- rbind(results, c(cols[i], eda(data[[cols[i]]])))
   }
   
-  names(results) <- c("column", "missing", "value", "min", ".01", ".05", ".1",
-                      ".2", ".3", ".4", ".5", ".6", ".7", ".8", ".9", ".95", ".99", "max")
+  results <- as_tibble(results)
+  
+  names(results) <- c("column", "missing", "value", "min", "p01", "p05", "p10",
+                      "p20", "p30", "p40", "p50", "p60", "p70", "p80", "p90", "p95", "p99", "max")
   
   results
 }
+
+
+
+
+
+
+
+
+
+
+
+
 

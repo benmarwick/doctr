@@ -144,3 +144,6 @@ problems(resultados)
 problems(resultados, 3)
 problems(resultados, "tipo_pagamento")
 
+# Rodar análise exploratória na base
+examine(data, cols)
+
