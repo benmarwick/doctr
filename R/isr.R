@@ -51,8 +51,13 @@ problems <- function(x, i = 0) {
 #' @param x vetor
 #' @param min_val valor mínimo
 #' @param max_val valor máximo
-#' @param allow_na lógico indicando se a variável pode ter NA's
+#' @param allow_na lógico indicando se o vetor pode ter NA's
+#' @param rational lógico indicando se o vetor é de números racionais
+#' @param max_dec_places número máximo de casas decimais
 #' 
+#' @rdname is_continuous
+#' 
+#' @export
 is_continuous <- function(x, min_val = -Inf, max_val = Inf, allow_na = TRUE, rational = TRUE, max_dec_places = Inf) {
   min_val = as.numeric(min_val)
   max_val = as.numeric(max_val)
@@ -145,27 +150,37 @@ is_continuous <- function(x, min_val = -Inf, max_val = Inf, allow_na = TRUE, rat
   return(ret)
 }
 
-# Verificar se é um vetor de contagens (números, inteiros, [0, Inf])
+#' Verificar se é um vetor de contagens (números, inteiros, [0, Inf])
+#' @rdname is_continuous
 is_count <- function(x, min_val = 0, max_val = Inf, allow_na = TRUE) {
   is_continuous(x, min_val, max_val, allow_na, rational = FALSE)
 }
 
-# Verificar se é um vetor de quantidades (números, racionais, [-Inf, Inf])
+#' Verificar se é um vetor de quantidades (números, racionais, [-Inf, Inf])
+#' @rdname is_continuous
 is_quantity <- function(x, min_val = 0, max_val = Inf, allow_na = TRUE) {
   is_continuous(x, min_val, max_val, allow_na)
 }
 
-# Verificar se é um vetor de porcentagens (números, racionais, [0, 100])
+#' Verificar se é um vetor de porcentagens (números, racionais, [0, 100])
+#' @rdname is_continuous
 is_percentage <- function(x, min_val = 0, max_val = 100, allow_na = TRUE) {
   is_continuous(x, min_val, max_val, allow_na)
 }
 
-# Verificar se é um vetor de valores monetários (números, racionais, [0, Inf])
+#' Verificar se é um vetor de valores monetários (números, racionais, [0, Inf])
+#' @rdname is_continuous
+#' @export
 is_money <- function(x, min_val = 0, max_val = 10000, allow_na = TRUE, max_dec_places = 2) {
   is_continuous(x, min_val, max_val, allow_na, max_dec_places = max_dec_places)
 }
 
-# Rodar bateria de testes
+#' Rodar bateria de testes
+#' 
+#' @param cols vetor de chr com nome das colunas
+#' @param funs lista de funções aplicadas p/ cada coluna
+#' @param args lista de argumentos passados p/ cada função
+#'
 run_tests <- function(cols, funs, args) {
   results <- c()
   problems <- c()
@@ -185,7 +200,12 @@ run_tests <- function(cols, funs, args) {
   return(ret)
 }
 
-# Obter inputs para uma bateria de testes
+#' Obter inputs para uma bateria de testes
+#' 
+#' @param data banco de dados
+#' @param exams testes a serem rodados
+#' 
+#' @export
 diagnose <- function(data, exams) {
 
   # Remover NAs
@@ -218,6 +238,11 @@ diagnose <- function(data, exams) {
   run_tests(cols, funs, args)
 }
 
+#' Análise exploratória de uma coluna
+#' 
+#' @param x vetor 
+#'
+#'
 eda <- function(x) {
   na <- length(x[is.na(x)])
   non_na <- length(x) - na
@@ -231,6 +256,12 @@ eda <- function(x) {
   as.character(c(na, non_na, min, qntl, max))
 }
 
+#' Análise exploratória de um banco de dados
+#' 
+#' @param data banco de dados
+#' @param cols vetor de chr com nome das colunas
+#'
+#' @export
 examine <- function(data, cols) {
   results <- c()
   
