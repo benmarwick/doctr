@@ -4,10 +4,12 @@
 \alias{print.logi_prob}
 \title{Imprimir um objeto logi_prob}
 \usage{
-\method{print}{logi_prob}(x)
+\method{print}{logi_prob}(x, ...)
 }
 \arguments{
 \item{x}{objeto logi_prob}
+
+\item{...}{other arguments passed to print}
 }
 \description{
 Imprimir um objeto logi_prob

@@ -1,10 +1,11 @@
 #' Imprimir um objeto logi_prob
 #' 
 #' @param x objeto logi_prob
+#' @param ... other arguments passed to print
 #' 
 #' @export
-print.logi_prob <- function(x) {
-  print(x == TRUE)
+print.logi_prob <- function(x, ...) {
+  print(x == TRUE, ...)
 }
 
 #' Imprimir os problemas associados a uma coluna de uma tabela
@@ -27,21 +28,21 @@ problems <- function(x, i = 0) {
     y <- attr(x, "problems")
     msg <- ""
     for (i in 1:length(y$columns)) {
-      msg <- str_c(msg, "For ", y$columns[i], ":\n")
-      msg <- str_c(msg, y$problems[i], "\n")
+      msg <- stringr::str_c(msg, "For ", y$columns[i], ":\n")
+      msg <- stringr::str_c(msg, y$problems[i], "\n")
     }
     
-    msg <- str_sub(msg, 1, -2)
+    msg <- stringr::str_sub(msg, 1, -2)
     message(msg)
   }
   else {
     y <- attr(x, "problems")
     msg <- ""
     
-    msg <- str_c(msg, "For ", y$columns[i], ":\n")
-    msg <- str_c(msg, y$problems[i], "\n")
+    msg <- stringr::str_c(msg, "For ", y$columns[i], ":\n")
+    msg <- stringr::str_c(msg, y$problems[i], "\n")
     
-    msg <- str_sub(msg, 1, -2)
+    msg <- stringr::str_sub(msg, 1, -2)
     message(msg)
   }
 }
@@ -72,7 +73,7 @@ is_continuous <- function(x, min_val = -Inf, max_val = Inf, allow_na = TRUE, rat
   if (length(x) == 0) {
     msg <- paste0(msg, "  Vector has length 0\n")
     
-    msg <- str_sub(msg, 1, -2)
+    msg <- stringr::str_sub(msg, 1, -2)
     ret <- FALSE
     attr(ret, "problems") <- msg
     class(ret) <- c("logi_prob", class(ret))
@@ -90,23 +91,23 @@ is_continuous <- function(x, min_val = -Inf, max_val = Inf, allow_na = TRUE, rat
   
   # Verificar a presença de não-inteiros/não-racionais
   if (!rational) {
-    if (length(x) > 0 && sum(map_lgl(x, function(i) !are_equal(i, as.integer(i)))) > 0) {
-      count <- sum(map_lgl(x, function(i) !are_equal(i, as.integer(i))))
+    if (length(x) > 0 && sum(purrr::map_lgl(x, function(i) !assertthat::are_equal(i, as.integer(i)))) > 0) {
+      count <- sum(purrr::map_lgl(x, function(i) !assertthat::are_equal(i, as.integer(i))))
       msg <- paste0(msg, "  Found ", count, " non-integers\n")
-      x <- x[!map_lgl(x, function(i) !are_equal(i, as.integer(i)))]
+      x <- x[!purrr::map_lgl(x, function(i) !assertthat::are_equal(i, as.integer(i)))]
       flag <- FALSE
     }
   }
   else {
-    if (length(x) > 0 && sum(map_lgl(x, function(i) !are_equal(i, as.numeric(i)))) > 0) {
-      count <- sum(map_lgl(x, function(i) !are_equal(i, as.numeric(i))))
+    if (length(x) > 0 && sum(purrr::map_lgl(x, function(i) !assertthat::are_equal(i, as.numeric(i)))) > 0) {
+      count <- sum(purrr::map_lgl(x, function(i) !assertthat::are_equal(i, as.numeric(i))))
       msg <- paste0(msg, "  Found ", count, " non-numerics\n")
-      x <- x[!map_lgl(x, function(i) !are_equal(i, as.numeric(i)))]
+      x <- x[!purrr::map_lgl(x, function(i) !assertthat::are_equal(i, as.numeric(i)))]
       flag <- FALSE
     }
     
     if (max_dec_places > 0) {
-      len <- str_length(str_extract(as.character(x), "\\.[0-9]*")) - 1
+      len <- stringr::str_length(stringr::str_extract(as.character(x), "\\.[0-9]*")) - 1
       len[is.na(len)] <- 0
       
       if (sum(len > max_dec_places) > 0) {
@@ -143,7 +144,7 @@ is_continuous <- function(x, min_val = -Inf, max_val = Inf, allow_na = TRUE, rat
   }
   
   # Caso tenham sido encontrados problemas, retornar uma mensagem e FALSE
-  msg <- str_sub(msg, 1, -2)
+  msg <- stringr::str_sub(msg, 1, -2)
   ret <- FALSE
   attr(ret, "problems") <- msg
   class(ret) <- c("logi_prob", class(ret))
@@ -186,13 +187,13 @@ run_tests <- function(cols, funs, args) {
   problems <- c()
 
   for (i in 1:length(funs)) {
-    suppressWarnings(logi_prob <- invoke(funs[[i]], args[[i]]))
+    suppressWarnings(logi_prob <- purrr::invoke(funs[[i]], args[[i]]))
     results <- append(results, logi_prob)
     problems <- append(problems, problems(logi_prob))
   }
   
-  ret <- tibble(columns = cols, results)
-  probs <- tibble(columns = cols, problems)
+  ret <- tibble::tibble(columns = cols, results)
+  probs <- tibble::tibble(columns = cols, problems)
   
   attr(ret, "problems") <- probs
   class(ret) <- c("results_prob", class(ret))
@@ -215,20 +216,20 @@ diagnose <- function(data, exams) {
   cols <- exams$cols
   
   # Transformar os nomes de funções em uma lista de chamadas
-  funs <- map(exams$funs, get)
+  funs <- purrr::map(exams$funs, get)
   
   # Transformar as colunas em listas dentro de 'exams'
   args <- exams %>%
-    mutate(
-      x = map(cols, ~data[[.x]])
+    dplyr::mutate(
+      x = purrr::map(cols, ~data[[.x]])
     ) %>%
-    transpose()
+    purrr::transpose()
   
   # Remover argumentos vazios
-  args <- args %>% map(~keep(.x, function(x) any(x != "")))
+  args <- args %>% purrr::map(~purrr::keep(.x, function(x) any(x != "")))
   
   # Remover funções e nomes de coluna da lista de argumentos
-  args <- args %>% map(function(x) {
+  args <- args %>% purrr::map(function(x) {
     x[["cols"]] <- NULL
     x[["funs"]] <- NULL
     x
@@ -269,7 +270,7 @@ examine <- function(data, cols) {
     results <- rbind(results, c(cols[i], eda(data[[cols[i]]])))
   }
   
-  results <- as_tibble(results)
+  results <- tibble::as_tibble(results)
   
   names(results) <- c("column", "missing", "value", "min", "p01", "p05", "p10",
                       "p20", "p30", "p40", "p50", "p60", "p70", "p80", "p90", "p95", "p99", "max")
