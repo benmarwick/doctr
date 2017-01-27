@@ -1,4 +1,6 @@
 
+
+
 ## PROBLEMS ---------------------------------------------------------
 
 #' Create message with problems found in x
@@ -72,14 +74,32 @@ check_type <- function(x, type) {
   return(x)
 }
 
+#' Check if fraction of 'x$data' that is NA is => 'min_na'
+#' 
+#' @param x list with data, result, and any errors already found
+#' @param min_na minimum fraction of 'x$data' that can be NA
+#' @param rm_na whether NAs should be removed once test is over
+check_min_na <- function(x, min_na, rm_na = FALSE) {
+  if (sum(is.na(x$data))/length(x$data) < min_na) {
+    x$min_na <- paste0("Less than ", min_na*100, "% of entries are NAs")
+    x$result <- FALSE
+  }
+  
+  if (rm_na) {
+    x$data <- x$data[!is.na(x$data)]
+  }
+  
+  return(x)
+}
+
 #' Check if fraction of 'x$data' that is NA is <= 'max_na'
 #' 
 #' @param x list with data, result, and any errors already found
 #' @param max_na maximum fraction of 'x$data' that can be NA
 #' @param rm_na whether NAs should be removed once test is over
-check_na <- function(x, max_na, rm_na = FALSE) {
+check_max_na <- function(x, max_na, rm_na = FALSE) {
   if (sum(is.na(x$data))/length(x$data) > max_na) {
-    x$na <- paste0("More than ", max_na*100, "% of entries are NAs")
+    x$max_na <- paste0("More than ", max_na*100, "% of entries are NAs")
     x$result <- FALSE
   }
   
@@ -110,9 +130,9 @@ check_mdp <- function(x, mdp) {
 #' 
 #' @param x list with data, result, and any errors already found
 #' @param max_val maximum value an entry in 'x$data' can have
-check_max <- function(x, max_val) {
+check_max_val <- function(x, max_val) {
   if (sum(x$data > max_val) > 0) {
-    x$max <- paste0(sum(x$data > max_val), " entries are larger than ", max_val)
+    x$max_val <- paste0(sum(x$data > max_val), " entries are larger than ", max_val)
     x$result <- FALSE
   }
   
@@ -123,9 +143,73 @@ check_max <- function(x, max_val) {
 #' 
 #' @param x list with data, result, and any errors already found
 #' @param min_val maximum value an entry in 'x$data' can have
-check_min <- function(x, min_val) {
+check_min_val <- function(x, min_val) {
   if (sum(x$data < min_val) > 0) {
-    x$min <- paste0(sum(x$data < min_val), " entries are smaller than ", min_val)
+    x$min_val <- paste0(sum(x$data < min_val), " entries are smaller than ", min_val)
+    x$result <- FALSE
+  }
+  
+  return(x)
+}
+
+#' Check if there aren't less than 'min_unq' classes in 'x$data'
+#' 
+#' @param x list with data, result, and any errors already found
+#' @param min_unq minimum number of distinct classes 'x$data' can have
+check_min_unq <- function(x, min_unq) {
+  unq <- unique(x$data)
+  
+  if (length(unq) < min_unq) {
+    x$min_unq <- paste0("There are less than ", min_unq, " unique classes")
+    x$result <- FALSE
+  }
+  
+  return(x)
+}
+
+#' Check if there aren't more than 'max_unq' classes in 'x$data'
+#' 
+#' @param x list with data, result, and any errors already found
+#' @param max_unq maximum number of distinct classes 'x$data' can have
+check_max_unq <- function(x, max_unq) {
+  unq <- unique(x$data)
+  
+  if (length(unq) > max_unq) {
+    x$max_unq <- paste0("There are more than ", max_unq, " unique classes")
+    x$result <- FALSE
+  }
+  
+  return(x)
+}
+
+#' Check if all classes represent at least 'lfc' of 'x$data'
+#' 
+#' @param x list with data, result, and any errors already found
+#' @param lfc minimum fraction of total for least frequent class
+check_lfc <- function(x, lfc) {
+  lf <- lfc*length(x$data)
+  c <- table(x$data)[table(x$data) < lf]
+  
+  if (length(c) > 0) {
+    x$lfc <- paste0("There are ", length(c), " classes that represent less than ",
+                    lfc*100, "% of the total")
+    x$result <- FALSE
+  }
+  
+  return(x)
+}
+
+#' Check if no classe represents more than 'mfc' of 'x$data'
+#' 
+#' @param x list with data, result, and any errors already found
+#' @param mfc maximum fraction of total for most frequent class
+check_mfc <- function(x, mfc) {
+  mf <- mfc*length(x$data)
+  c <- table(x$data)[table(x$data) > mf]
+  
+  if (length(c) > 0) {
+    x$mfc <- paste0("There are ", length(c), " classes that represent more than ",
+                    mfc*100, "% of the total")
     x$result <- FALSE
   }
   
@@ -154,10 +238,10 @@ is_continuous <- function(x, min_val = -Inf, max_val = Inf, max_na = 1.0, max_de
   x <- x %>%
     check_len(0) %>%
     check_type("double") %>%
-    check_na(max_na, TRUE) %>%
+    check_max_na(max_na, TRUE) %>%
     check_mdp(max_dec_places) %>%
-    check_max(max_val) %>%
-    check_min(min_val)
+    check_max_val(max_val) %>%
+    check_min_val(min_val)
   
   return(x)
 }
@@ -188,6 +272,32 @@ is_percentage <- function(x, min_val = 0, max_val = 1, max_na = 1.0, max_dec_pla
 #' @rdname is_continuous
 is_money <- function(x, min_val = 0, max_val = 10000, max_na = 1.0, max_dec_places = 2) {
   is_continuous(x, min_val, max_val, max_na, max_dec_places)
+}
+
+#' Check if 'x$data' is a categorical variable
+#' 
+#' @param x list with data, result, and any errors already found
+#' @param min_unq minimum number of unique classes 'x$data' can have
+#' @param max_unq maximum number of unique classes 'x$data' can have
+#' @param max_na fraction of 'x$data' that can be NA
+#' @param least_frec_cls minimum fraction of total represented by least frequent class
+#' 
+#' @rdname is_categorical
+is_categorical <- function(x, min_unq = 0, max_unq = Inf, max_na = 1.0, least_frec_cls = 0) {
+  min_unq <- as.numeric(min_unq)
+  max_unq <- as.numeric(max_unq)
+  max_na <- as.numeric(max_na)
+  least_frec_cls <- as.numeric(least_frec_cls)
+  
+  x <- x %>%
+    check_len(0) %>%
+    check_type("character") %>%
+    check_max_na(max_na, TRUE) %>%
+    check_min_unq(min_unq) %>%
+    check_max_unq(max_unq) %>%
+    check_lfc(least_frec_cls)
+  
+  return(x)
 }
 
 
@@ -230,9 +340,3 @@ diagnose <- function(X, exams) {
   
   return(X)
 }
-
-
-
-
-
-
