@@ -12,7 +12,5 @@ Imports:
     dplyr,
     purrr,
     stringr,
-    tibble,
-    magrittr,
-    assertthat
+    magrittr
 RoxygenNote: 5.0.1
