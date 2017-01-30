@@ -31,7 +31,6 @@ Para instalar o pacote, apenas rode o seguinte código (note que o caminho para 
 
 ```{r, message = FALSE}
 devtools::install_local("/home/caio/doctr/")
-library(doctr)
 ```
 
 Agora que temos o pacote, podemos ler os dados que desejamos analisar. Não existe nenhuma recomendação muito específica para esse passo, mas precisamos que todos os missings sejam `NA` (e não "") e que strings não sejam tratadas como fatores. Isso já está implementado perfeitamente em `readr::read_csv` (ou `readr::read_delim` para arquivos separados com ponto-e-vírgula) e em `readxl::read_excel`.
@@ -85,15 +84,15 @@ knitr::kable(head(exams))
 Agora a única coisa que precisamos fazer é rodar `diagnose`. Essa função Rodará os exames em `X` e nos retornará uma lista de resultados que pode ser consultada com `problems`:
 
 ```{r}
-resultados <- doctrp::diagnose(X, exams)
-doctrp::problems(resultados)
+# resultados <- doctrp::diagnose(X, exams)
+# doctrp::problems(resultados)
 ```
 
 Se quisermos consultar os problemas encontrados em colunas específicas, podemos usar `problems` com seu segundo argumento:
 
 ```{r}
-doctrp::problems(resultados, 3)
-doctrp::problems(resultados, "categorica")
+# doctrp::problems(resultados, 3)
+# doctrp::problems(resultados, "categorica")
 ```
 
 Com isso temos um resumo compreensivo de em quais testes cada variável não passou. Ussamos essa informação para tratar a base ou para mudar nossas precomcepções sobre ela.

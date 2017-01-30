@@ -1,4 +1,20 @@
 
+## SUMMARIES --------------------------------------------------------
+
+#' Return summary of columns of doubles in a table
+#' 
+#' @param X list created by 'examine'
+summary_dbl <- function(X) {
+  return(tibble::as_tibble(X[[1]]))
+}
+
+#' Return summary of columns of characters in a table
+#' 
+#' @param X list created by 'examine'
+summary_chr <- function(X) {
+  return(tibble::as_tibble(X[[2]]))
+}
+
 
 
 ## PROBLEMS ---------------------------------------------------------
@@ -298,7 +314,7 @@ is_categorical <- function(x, min_unq = 0, max_unq = Inf, max_na = 1.0, least_fr
 
 
 
-## PROFILING --------------------------------------------------------
+## PROFILES ---------------------------------------------------------
 
 #' Create profile for table
 #' 
@@ -308,7 +324,7 @@ profile_tbl <- function(X) {
   meta$ncol <- length(X)
   
   meta$names <- paste(names(X), collapse = " ")
-  meta$types <- paste(sapply(map(X, ~.x[[1]]), typeof), collapse = " ")
+  meta$types <- paste(sapply(purrr::map(X, ~.x[[1]]), ?typeof), collapse = " ")
   
   X$meta <- meta
   
@@ -322,12 +338,12 @@ profile_dbl <- function(x) {
   x$min <- min(x$data, na.rm = TRUE)
   x$max <- max(x$data, na.rm = TRUE)
   
-  qntl <- quantile(x$data, c(0.01, 0.05, seq(0.1, 0.9, 0.1), 0.95,
+  qntl <- stats::quantile(x$data, c(0.01, 0.05, seq(0.1, 0.9, 0.1), 0.95,
                              0.99), na.rm = TRUE)
   x <- append(x, as.list(qntl))
   
   x$mean <- mean(x$data, na.rm = TRUE)
-  x$sd <- sd(x$data, na.rm = TRUE)
+  x$sd <- stats::sd(x$data, na.rm = TRUE)
   
   x$na <- sum(is.na(x$data))
   x$val <- length(x$data) - x$na
@@ -338,7 +354,7 @@ profile_dbl <- function(x) {
   
   x$unq <- length(unique(x$data))
   
-  dp <- str_length(str_extract(as.character(x$data), "\\.[0-9]*")) - 1
+  dp <- stringr::str_length(stringr::str_extract(as.character(x$data), "\\.[0-9]*")) - 1
   dp[is.na(dp)] <- 0
   x$mdp <- max(dp)
   
@@ -349,42 +365,42 @@ profile_dbl <- function(x) {
 #' 
 #' @param x list with data, and all of the summary statistics of that data
 profile_chr <- function(x) {
-  str_len <- suppressWarnings(str_length(x$data))
+  str_len <- suppressWarnings(stringr::str_length(x$data))
   str_len[is.na(str_len)] <- 0
   
   x$min <- min(str_len)
   x$max <- max(str_len)
   
-  qntl <- quantile(str_len, c(0.01, 0.05, seq(0.1, 0.9, 0.1), 0.95,
+  qntl <- stats::quantile(str_len, c(0.01, 0.05, seq(0.1, 0.9, 0.1), 0.95,
                               0.99), na.rm = TRUE)
   x <- append(x, as.list(qntl))
   
   x$mean <- mean(str_len, na.rm = TRUE)
-  x$sd <- sd(str_len, na.rm = TRUE)
+  x$sd <- stats::sd(str_len, na.rm = TRUE)
   
   x$na <- sum(is.na(x$data))
   x$val <- length(x$data) - x$na
   
   x$unq <- length(unique(x$data))
   
-  sample <- paste(sample(x$data, 100), collapse = "")
-  x$asc <- ifelse(as.character(guess_encoding(charToRaw(sample))[1, 1])
+  sample <- paste(sample(x$data, 100, replace = TRUE), collapse = "")
+  x$asc <- ifelse(as.character(readr::guess_encoding(charToRaw(sample))[1, 1])
                   == "ASCII", 1, 0)
-  x$ltr <- str_count(sample, "[a-zA-Z ]")/str_length(sample)
-  x$num <- str_count(sample, "[0-9]")/str_length(sample)
+  x$ltr <- stringr::str_count(sample, "[a-zA-Z ]")/stringr::str_length(sample)
+  x$num <- stringr::str_count(sample, "[0-9]")/stringr::str_length(sample)
   
   return(x)
 }
 
 #' Create profile of every column in X
 #' 
-#' @param X table in list form
+#' @param X table to be profiled
 profile <- function(X) {
   
   X <- X %>%
     as.list() %>%
-    map(~list(.x)) %>%
-    map(function(.x) {
+    purrr::map(~list(.x)) %>%
+    purrr::map(function(.x) {
       names(.x) <- "data"
       .x
     })
@@ -398,7 +414,7 @@ profile <- function(X) {
   }
   
   X <- X %>%
-    map(function(.x){
+    purrr::map(function(.x){
       .x$data <- NULL
       .x
     })
@@ -409,6 +425,45 @@ profile <- function(X) {
 
 
 ## EXPORTED ---------------------------------------------------------
+
+#' Create summary statistics for every column in 'X'
+#' 
+#' @param X table to be examined
+#' 
+#' @export
+examine <- function(X) {
+  cols <- names(X)
+  
+  X <- X %>%
+    as.list() %>%
+    purrr::map(~list(.x)) %>%
+    purrr::map(function(.x) {
+      names(.x) <- "data"
+      .x
+    })
+  
+  doubles <- dplyr::tibble()
+  characters <- dplyr::tibble()
+  for (i in 1:length(X)) {
+    X[[i]] <- switch(typeof(X[[i]]$data),
+                     double = profile_dbl(X[[i]]),
+                     integer = profile_dbl(X[[i]]),
+                     character = profile_chr(X[[i]]))
+    
+    if (typeof(X[[i]]$data) == "character") {
+      X[[i]]$data <- NULL
+      X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
+      characters <- dplyr::bind_rows(characters, X[[i]])
+    }
+    else {
+      X[[i]]$data <- NULL
+      X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
+      doubles <- dplyr::bind_rows(doubles, X[[i]])
+    }
+  }
+  
+  return(list(doubles, characters))
+}
 
 #' Run tests on a table to check if it fits it's expected form
 #' 
@@ -463,10 +518,17 @@ compare <- function(X, Y) {
   
   dist <- c()
   for (i in 1:(length(X) - 1)) {
-    dist <- append(dist, dist(bind_rows(flatten(X[[i]]), flatten(Y[[i]])))[1])
+    dist <- append(dist, dist(dplyr::bind_rows(purrr::flatten(X[[i]]), purrr::flatten(Y[[i]])))[1])
   }
   
   return(dist)
 }
+
+
+
+
+
+
+
 
 

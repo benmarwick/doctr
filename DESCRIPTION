@@ -12,7 +12,9 @@ Imports:
     dplyr,
     purrr,
     stringr,
-    magrittr
+    magrittr,
+    readr,
+    tibble
 RoxygenNote: 5.0.1
 Suggests: knitr,
     rmarkdown
