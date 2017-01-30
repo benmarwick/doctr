@@ -1,0 +1,72 @@
+---
+title: "Documentação `doctr`"
+author: "Caio Lente"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Documentação `doctr`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+> The doctor should be opaque to his patients and, like a mirror, should show them nothing but what is shown to him. - Sigmund Freud
+
+`doctr` é um pacote de verificação de qualidade de dados para R. Através de algumas funções de uso simples ele consegue gerar análises exploratórias, rodar testes em variáveis e alertar para diferenças muito grandes entre duas entregas de uma mesma base.
+
+Para que possamos usar o `doctr`, precisamos primeiro instalá-lo e depois ler os dados a serem analisados de uma forma consistente. Tendo feito isso, já podemos usar qualquer uma das suas funções: `examine`, `diagnose` e `compare`. Este documento vai abordar tudo isso.
+
+## Introdução
+
+Como talvez já tenha ficado claro pelo nomes de suas funções, o `doctr` foi construído para emular o procedimento de um médico cuidando de um paciente. Essa metáfora facilita o entendimento do que cada parte do pacote faz. Deste modo podemos considerar que o `doctr` avalia a "saúde" (qualidade dos dados) de um "paciente" (base).
+
+A primeira coisa que um médico faz ao se deparar com um novo paciente é examiná-lo; aqui ele gera uma ficha simples com dados sobre o paciente (peso, altura, etc.). Para isso temos a função `examine`, que gera a análise exploratória das colunas da base.
+
+Depois disso o médico diagnostica seu paciente; sabendo os dados vitais da pessoa, ele a faz passar por exames mais específicos e, a partir dos resultados destes, consegue entender quais são os problemas que afligem o paciente. A função `diagnose` faz isso. Ela recebe uma base e os "exames" a serem rodados em suas colunas, e retorna se as colunas passaram nesses exames (e se não passaram, onde não passaram).
+
+Depois de medicar o paciente (que nesse caso seria tratar a base até que ela passe nos exames), o médico avalia a sua evolução. A função `compare` cria perfis (uma "ficha clínica") para cada coluna de duas entregas de uma mesma base e retorna alertas quando um perfil está muito diferente do outro.
+
+## Instalação e leitura
+
+Para instalar o pacote, apenas rode o seguinte código (note que o caminho para o arquivo provavelmente não será esse):
+
+```{r, message = FALSE}
+devtools::install_local("/home/caio/doctr/")
+```
+
+Agora que temos o pacote, podemos ler os dados que desejamos analisar. Não existe nenhuma recomendação muito específica para esse passo, mas precisamos que todos os missings sejam `NA` (e não "") e que strings não sejam tratadas como fatores. Isso já está implementado perfeitamente em `readr::read_csv` (ou `readr::read_delim` para arquivos separados com ponto-e-vírgula) e em `readxl::read_excel`.
+
+Para esse tutorial, usaremos a base `dplyr::mtcars`, então nem precisamos nos preocupar em lê-la. Ela possui uma coluna de texto e 11 colunas numéricas:
+
+```{r, echo = FALSE, results = 'asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+
+
+## `Examine`
+
+## `Diagnose`
+
+## `Compare`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

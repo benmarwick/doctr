@@ -27,10 +27,6 @@ problems_ <- function(x, name) {
 problems <- function(X, i = 0) {
   
   if (i != 0) {
-    if(!is.numeric(i)) {
-      i <- grep(i, names(X))
-    }
-    
     msg <- problems_(X[[i]], names(X)[i])
     message(stringr::str_sub(msg, 1, -2))
   }
