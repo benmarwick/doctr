@@ -298,7 +298,117 @@ is_categorical <- function(x, min_unq = 0, max_unq = Inf, max_na = 1.0, least_fr
 
 
 
-## RUNNING EXAMS ----------------------------------------------------
+## PROFILING --------------------------------------------------------
+
+#' Create profile for table
+#' 
+#' @param X table in list form
+profile_tbl <- function(X) {
+  meta <- list()
+  meta$ncol <- length(X)
+  
+  meta$names <- paste(names(X), collapse = " ")
+  meta$types <- paste(sapply(map(X, ~.x[[1]]), typeof), collapse = " ")
+  
+  X$meta <- meta
+  
+  return(X)
+}
+
+#' Create profile for column of doubles
+#' 
+#' @param x list with data, and all of the summary statistics of that data
+profile_dbl <- function(x) {
+  x$min <- min(x$data, na.rm = TRUE)
+  x$max <- max(x$data, na.rm = TRUE)
+  
+  qntl <- quantile(x$data, c(0.01, 0.05, seq(0.1, 0.9, 0.1), 0.95,
+                             0.99), na.rm = TRUE)
+  x <- append(x, as.list(qntl))
+  
+  x$mean <- mean(x$data, na.rm = TRUE)
+  x$sd <- sd(x$data, na.rm = TRUE)
+  
+  x$na <- sum(is.na(x$data))
+  x$val <- length(x$data) - x$na
+  
+  x$neg <- sum(x$data < 0, na.rm = TRUE)
+  x$zero <- sum(x$data == 0, na.rm = TRUE)
+  x$pos <- sum(x$data > 0, na.rm = TRUE)
+  
+  x$unq <- length(unique(x$data))
+  
+  dp <- str_length(str_extract(as.character(x$data), "\\.[0-9]*")) - 1
+  dp[is.na(dp)] <- 0
+  x$mdp <- max(dp)
+  
+  return(x)
+}
+
+#' Create profile for column of characters
+#' 
+#' @param x list with data, and all of the summary statistics of that data
+profile_chr <- function(x) {
+  str_len <- suppressWarnings(str_length(x$data))
+  str_len[is.na(str_len)] <- 0
+  
+  x$min <- min(str_len)
+  x$max <- max(str_len)
+  
+  qntl <- quantile(str_len, c(0.01, 0.05, seq(0.1, 0.9, 0.1), 0.95,
+                              0.99), na.rm = TRUE)
+  x <- append(x, as.list(qntl))
+  
+  x$mean <- mean(str_len, na.rm = TRUE)
+  x$sd <- sd(str_len, na.rm = TRUE)
+  
+  x$na <- sum(is.na(x$data))
+  x$val <- length(x$data) - x$na
+  
+  x$unq <- length(unique(x$data))
+  
+  sample <- paste(sample(x$data, 100), collapse = "")
+  x$asc <- ifelse(as.character(guess_encoding(charToRaw(sample))[1, 1])
+                  == "ASCII", 1, 0)
+  x$ltr <- str_count(sample, "[a-zA-Z ]")/str_length(sample)
+  x$num <- str_count(sample, "[0-9]")/str_length(sample)
+  
+  return(x)
+}
+
+#' Create profile of every column in X
+#' 
+#' @param X table in list form
+profile <- function(X) {
+  
+  X <- X %>%
+    as.list() %>%
+    map(~list(.x)) %>%
+    map(function(.x) {
+      names(.x) <- "data"
+      .x
+    })
+  
+  X <- profile_tbl(X)
+  for (i in 1:(length(X) - 1)) {
+    X[[i]] <- switch(typeof(X[[i]]$data),
+                     double = profile_dbl(X[[i]]),
+                     integer = profile_dbl(X[[i]]),
+                     character = profile_chr(X[[i]]))
+  }
+  
+  X <- X %>%
+    map(function(.x){
+      .x$data <- NULL
+      .x
+    })
+  
+  return(X)
+}
+
+
+
+## EXPORTED ---------------------------------------------------------
 
 #' Run tests on a table to check if it fits it's expected form
 #' 
@@ -336,3 +446,27 @@ diagnose <- function(X, exams) {
   
   return(X)
 }
+
+#' Compare the profiles of two tables
+#' 
+#' @param X table used as standard for comparison
+#' @param Y table to be evaluated
+#' 
+#' @export
+compare <- function(X, Y) {
+  X <- profile(X)
+  Y <- profile(Y)
+  
+  # if (X$meta != Y$meta) {
+  #   return(FALSE)
+  # }
+  
+  dist <- c()
+  for (i in 1:(length(X) - 1)) {
+    dist <- append(dist, dist(bind_rows(flatten(X[[i]]), flatten(Y[[i]])))[1])
+  }
+  
+  return(dist)
+}
+
+
