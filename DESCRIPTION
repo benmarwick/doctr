@@ -1,4 +1,4 @@
-Package: doctrp
+Package: doctr
 Title: What the Package Does (one line, title case)
 Version: 0.0.0.9000
 Authors@R: c(person("Caio", "Lente", email = "ctlente@gmail.com", role = c("aut", "cre")), person("Daniel", "Falbel", email = "", role = c("aut")))
