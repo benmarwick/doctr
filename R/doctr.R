@@ -554,42 +554,51 @@ compare <- function(X, Y) {
   X <- profile(X)
   Y <- profile(Y)
   
+  results <- X
+  results <- results %>% purrr::map(~list(.x))
+  results <- mapply(append, results, TRUE, SIMPLIFY = FALSE)
+  results <- results %>%
+    purrr::map(function(.x) {
+      names(.x) <- c("data", "result")
+      .x
+    })
+  
   for (i in 1:3) {
     if (X$meta[[i]] != Y$meta[[i]]) {
-      message("Metadata for both tables is different")
-      return(FALSE)
+      results$meta$result <- FALSE
+      results$meta$meta <- "Metadata for both tables is different"
+      return(list(meta = results$meta))
     }
   }
+  
+  results$meta <- NULL
   
   msg <- "X and Y differed significantly for\n"
   flag <- TRUE
   for (i in 1:(length(X) - 1)) {
     for (j in 1:length(X[[i]])) {
-      if (abs(Y[[i]][[j]]) > abs(X[[i]][[j]]) * 1.5 ||
-          abs(Y[[i]][[j]]) < abs(X[[i]][[j]]) * 0.5) {
-        flag = FALSE
-        msg <- str_c(
-          msg,
-          paste0(
-            "    '",
-            names(X)[i],
-            "' (specifically criteria '",
-            names(X[[i]])[j],
-            "')\n"
-          )
+      if (abs(Y[[i]][[j]]) > abs(X[[i]][[j]]) * 1.5) {
+        results[[i]]$result <- FALSE
+        results[[i]][[names(X[[i]])[j]]] <- paste0(
+          "New value for '",
+          names(X[[i]])[j],
+          "' is too high"
         )
+        flag = FALSE
+      }
+      if (abs(Y[[i]][[j]]) < abs(X[[i]][[j]]) * 0.5) {
+        results[[i]]$result <- FALSE
+        results[[i]][[names(X[[i]])[j]]] <- paste0(
+          "New value for '",
+          names(X[[i]])[j],
+          "' is too low"
+        )
+        flag = FALSE
       }
     }
   }
   
-  if (flag) {
-    message("Table Y is similar enough to X")
-    return(TRUE)
-  }
-  else {
-    message(str_sub(msg, 1, -2))
-    return(FALSE)
-  }
+  return(results)
 }
 
 

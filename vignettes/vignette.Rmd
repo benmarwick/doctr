@@ -167,12 +167,12 @@ Com isso temos um resumo compreensivo de em quais testes cada variável não pas
 
 A função `compare` seria o último passo no relatório de qualidade de dados e se torna útil quando temos que garantir que multiplas versões de uma base estão em condições semelhantes. Depois que já tivermos uma base em condições pristinas (seja usando ou não as funções descritas acima), podemos verificar se uma segunda entrega dessa base está no mesmo formato rodando `compare`.
 
-Para propósitos de demonstração, testarei `compare` em cenários artificiais: comparando `X` consigo mesma, `X` com `exams` e `X` com uma fatia de si mesma. Ela retorna `TRUE` caso as duas tabelas sejam semelhantes o suficiente e `FALSE` caso contrário, fora uma mensagem explicando o resultado (qual parâmetro foi considerado diferente demais em caso de falha; o nome do parâmetro segue o mesmo formato que as colunas das tabelas retornadas por `examine`).
+Para propósitos de demonstração, testarei `compare` em cenários artificiais: comparando `X` consigo mesma, `X` com `exams` e `X` com uma fatia de si mesma. Ela retorna uma lista de resultados que pode ser consultada com `issues` exatamente como em `diagnose` (o nome dos parâmetros problemáticos seguem o mesmo formato que as colunas das tabelas retornadas por `examine`).
 
 ```{r}
-true <- compare(X, X)
-false <- compare(X, exams)
-false <- compare(X, X[1:5, ])
+doctr::issues(doctr::compare(X, X))
+doctr::issues(doctr::compare(X, exams))
+doctr::issues(doctr::compare(X, X[1:5, ]))
 ```
 
 Note como `continua` é a fonte da maior parte dos problemas porque o elemento cortado com sua última linha pesava bastante na maioria das métricas avaliadas.
