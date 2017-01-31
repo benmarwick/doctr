@@ -76,6 +76,9 @@ issues_ <- function(x, name) {
 #' 
 #' @export
 issues <- function(X, i = 0) {
+  if (!is.numeric(i)) {
+    i <- grep(i, names(X))
+  }
   
   if (i != 0) {
     msg <- issues_(X[[i]], names(X)[i])
