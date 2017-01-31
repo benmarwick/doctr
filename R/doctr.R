@@ -1,4 +1,6 @@
 
+
+
 ## SUMMARIES --------------------------------------------------------
 
 #' Return summary of columns of doubles in a table
@@ -324,7 +326,7 @@ profile_tbl <- function(X) {
   meta$ncol <- length(X)
   
   meta$names <- paste(names(X), collapse = " ")
-  meta$types <- paste(sapply(purrr::map(X, ~.x[[1]]), ?typeof), collapse = " ")
+  meta$types <- paste(sapply(purrr::map(X, ~.x[[1]]), typeof), collapse = " ")
   
   X$meta <- meta
   
@@ -512,23 +514,26 @@ compare <- function(X, Y) {
   X <- profile(X)
   Y <- profile(Y)
   
-  # if (X$meta != Y$meta) {
-  #   return(FALSE)
-  # }
-  
-  dist <- c()
-  for (i in 1:(length(X) - 1)) {
-    dist <- append(dist, dist(dplyr::bind_rows(purrr::flatten(X[[i]]), purrr::flatten(Y[[i]])))[1])
+  for (i in 1:3) {
+    if (X$meta[[i]] != Y$meta[[i]]) {
+      message("Metadata for both tables is different")
+      return(FALSE)
+    }
   }
   
-  return(dist)
+  for (i in 1:(length(X) - 1)) {
+    for (j in 1:length(X[[i]])) {
+      if (abs(Y[[i]][[j]]) > abs(X[[i]][[j]]) * 1.2 ||
+          abs(Y[[i]][[j]]) < abs(X[[i]][[j]]) * 0.8) {
+        message(paste0("X and Y differed significantly for '", names(X)[i]), "'")
+        return(FALSE)
+      }
+    }
+    # dist <- append(dist, dist(dplyr::bind_rows(purrr::flatten(X[[i]]), purrr::flatten(Y[[i]])))[1])
+  }
+  
+  message("Table Y is similar enough to X")
+  return(TRUE)
 }
-
-
-
-
-
-
-
 
 
