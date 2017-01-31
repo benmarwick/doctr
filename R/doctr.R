@@ -19,18 +19,18 @@ summary_chr <- function(X) {
 
 
 
-## PROBLEMS ---------------------------------------------------------
+## ISSUES -----------------------------------------------------------
 
-#' Create message with problems found in x
+#' Create message with issues found in x
 #' 
 #' @param x list with data, result, and any errors already found
 #' @param name name of column referring to 'x'
-problems_ <- function(x, name) {
+issues_ <- function(x, name) {
   if (x$result) {
-    return(paste0("No problems found in '", name, "'\n"))
+    return(paste0("No issues found in '", name, "'\n"))
   }
   
-  msg <- paste0("Problems found in '", name, "'\n")
+  msg <- paste0("Issues found in '", name, "'\n")
   for (i in 3:length(x)) {
     msg <- paste0(msg, "    ", x[[i]], "\n")
   }
@@ -38,21 +38,23 @@ problems_ <- function(x, name) {
   return(msg)
 }
 
-#' Print messages with problems found in 'X' (or in one of its columns)
+#' Print messages with issues found in 'X' (or in one of its columns)
 #' 
 #' @param X list of lists with data, result, and any errors already found for each column
-#' @param i index of column from which to print problems
-problems <- function(X, i = 0) {
+#' @param i index of column from which to print issues
+#' 
+#' @export
+issues <- function(X, i = 0) {
   
   if (i != 0) {
-    msg <- problems_(X[[i]], names(X)[i])
+    msg <- issues_(X[[i]], names(X)[i])
     message(stringr::str_sub(msg, 1, -2))
   }
   else {
     msg <- ""
     
     for (i in 1:length(X)) {
-      msg <- paste0(msg, problems_(X[[i]], names(X)[i]))
+      msg <- paste0(msg, issues_(X[[i]], names(X)[i]))
     }
     message(stringr::str_sub(msg, 1, -2))
   }
@@ -426,7 +428,7 @@ profile <- function(X) {
 
 
 
-## EXPORTED ---------------------------------------------------------
+## MAIN -------------------------------------------------------------
 
 #' Create summary statistics for every column in 'X'
 #' 
