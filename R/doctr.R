@@ -1,11 +1,40 @@
 
 
 
+## GET FUNS ---------------------------------------------------------
+
+#' Convert vector of types to corresponding functions
+#' 
+#' @param types vector with data types (money, count, etc.)
+translate <- function(types) {
+  
+  new_funs <- c()
+  for (i in 1:length(types)) {
+    new_funs <- append(
+      new_funs,
+      switch(
+        types[i],
+        money = is_money,
+        count = is_count,
+        quantity = is_quantity,
+        continuous = is_continuous,
+        categorical = is_categorical
+      )
+    )
+  }
+  
+  return(new_funs)
+}
+
+
+
 ## SUMMARIES --------------------------------------------------------
 
 #' Return summary of columns of doubles in a table
 #' 
 #' @param X list created by 'examine'
+#' 
+#' @export
 summary_dbl <- function(X) {
   return(tibble::as_tibble(X[[1]]))
 }
@@ -13,6 +42,8 @@ summary_dbl <- function(X) {
 #' Return summary of columns of characters in a table
 #' 
 #' @param X list created by 'examine'
+#' 
+#' @export
 summary_chr <- function(X) {
   return(tibble::as_tibble(X[[2]]))
 }
@@ -411,10 +442,12 @@ profile <- function(X) {
   
   X <- profile_tbl(X)
   for (i in 1:(length(X) - 1)) {
-    X[[i]] <- switch(typeof(X[[i]]$data),
-                     double = profile_dbl(X[[i]]),
-                     integer = profile_dbl(X[[i]]),
-                     character = profile_chr(X[[i]]))
+    X[[i]] <- switch(
+      typeof(X[[i]]$data),
+      double = profile_dbl(X[[i]]),
+      integer = profile_dbl(X[[i]]),
+      character = profile_chr(X[[i]])
+    )
   }
   
   X <- X %>%
@@ -449,10 +482,12 @@ examine <- function(X) {
   doubles <- dplyr::tibble()
   characters <- dplyr::tibble()
   for (i in 1:length(X)) {
-    X[[i]] <- switch(typeof(X[[i]]$data),
-                     double = profile_dbl(X[[i]]),
-                     integer = profile_dbl(X[[i]]),
-                     character = profile_chr(X[[i]]))
+    X[[i]] <- switch(
+      typeof(X[[i]]$data),
+      double = profile_dbl(X[[i]]),
+      integer = profile_dbl(X[[i]]),
+      character = profile_chr(X[[i]])
+    )
     
     if (typeof(X[[i]]$data) == "character") {
       X[[i]]$data <- NULL
@@ -477,7 +512,7 @@ examine <- function(X) {
 #' @export
 diagnose <- function(X, exams) {
   exams[is.na(exams)] <- ""
-  funs <- purrr::map(exams$funs, get)
+  funs <- translate(exams$funs)
   
   X <- exams %>%
     dplyr::mutate(

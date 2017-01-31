@@ -85,7 +85,7 @@ exams <- tibble(
     "dinheiro", "contagem", "quantidade", "continua", "categorica"
   ),
   funs = c(
-    "is_money", "is_count", "is_quantity", "is_continuous", "is_categorical"
+    "money", "count", "quantity", "continuous", "categorical"
   ),
   max_na = c(
     "0.25", "", "", "0", "0"
@@ -123,14 +123,14 @@ Agora a única coisa que precisamos fazer é rodar `diagnose`. Essa função Rod
 
 ```{r}
 resultados <- doctr::diagnose(X, exams)
-doctr::problems(resultados)
+doctr::issues(resultados)
 ```
 
 Se quisermos consultar os problemas encontrados em colunas específicas, podemos usar `problems` com seu segundo argumento:
 
 ```{r}
-doctr::problems(resultados, 3)
-doctr::problems(resultados, "categorica")
+doctr::issues(resultados, 3)
+doctr::issues(resultados, "categorica")
 ```
 
 Com isso temos um resumo compreensivo de em quais testes cada variável não passou. Ussamos essa informação para tratar a base ou para mudar nossas precomcepções sobre ela.
