@@ -561,19 +561,35 @@ compare <- function(X, Y) {
     }
   }
   
+  msg <- "X and Y differed significantly for\n"
+  flag <- TRUE
   for (i in 1:(length(X) - 1)) {
     for (j in 1:length(X[[i]])) {
-      if (abs(Y[[i]][[j]]) > abs(X[[i]][[j]]) * 1.2 ||
-          abs(Y[[i]][[j]]) < abs(X[[i]][[j]]) * 0.8) {
-        message(paste0("X and Y differed significantly for '", names(X)[i]), "'")
-        return(FALSE)
+      if (abs(Y[[i]][[j]]) > abs(X[[i]][[j]]) * 1.5 ||
+          abs(Y[[i]][[j]]) < abs(X[[i]][[j]]) * 0.5) {
+        flag = FALSE
+        msg <- str_c(
+          msg,
+          paste0(
+            "    '",
+            names(X)[i],
+            "' (specifically criteria '",
+            names(X[[i]])[j],
+            "')\n"
+          )
+        )
       }
     }
-    # dist <- append(dist, dist(dplyr::bind_rows(purrr::flatten(X[[i]]), purrr::flatten(Y[[i]])))[1])
   }
   
-  message("Table Y is similar enough to X")
-  return(TRUE)
+  if (flag) {
+    message("Table Y is similar enough to X")
+    return(TRUE)
+  }
+  else {
+    message(str_sub(msg, 1, -2))
+    return(FALSE)
+  }
 }
 
 
