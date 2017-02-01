@@ -8,29 +8,23 @@ This is an R package to help check data consistency. In short, it attempts to au
 
 We can use `examine` to get a sense of how our dataset looks like
 
-```
-X %>%
-  examine() %>%
-  summary_dbl()
-
+```r
+X %>% examine() %>% summary_dbl()
 #> # A tibble: 4 × 25
-#>         name       min        max       `1%`      `5%`     `10%`     `20%`     `30%` `40%` `50%`   `60%`     `70%`      `80%`
-#>        <chr>     <dbl>      <dbl>      <dbl>     <dbl>     <dbl>     <dbl>     <dbl> <dbl> <dbl>   <dbl>     <dbl>      <dbl>
-#> 1   dinheiro    1.2300      12.23    1.23810    1.2705   1.31100   1.39200   1.47300   3.6  6.75  9.9000   12.0230     12.092
-#> 2   contagem    1.0000       6.00    1.05000    1.2500   1.50000   2.00000   2.50000   3.0  3.50  4.0000    4.5000      5.000
-#> 3 quantidade    1.1110 1234567.12    1.54656    3.2888   5.46660   9.82220  12.20000  12.6 13.00 13.0566   13.1132 246923.937
-#> 4   continua -123.1234   12345.00 -119.48970 -104.9549 -86.78638 -50.44936 -14.11234  -1.6 -1.00 -0.4000 1234.5000   4938.000
-#> # ... with 12 more variables: `90%` <dbl>, `95%` <dbl>, `99%` <dbl>, mean <dbl>, sd <dbl>, na <int>, val <int>, neg <int>, zero <int>,
-#> #   pos <int>, unq <int>, mdp <dbl>
+#>         name       min        max       `1%`      `5%`     `10%`     `20%`     `30%` `40%` `50%`   `60%`
+#>        <chr>     <dbl>      <dbl>      <dbl>     <dbl>     <dbl>     <dbl>     <dbl> <dbl> <dbl>   <dbl>
+#> 1   dinheiro    1.2300      12.23    1.23810    1.2705   1.31100   1.39200   1.47300   3.6  6.75  9.9000
+#> 2   contagem    1.0000       6.00    1.05000    1.2500   1.50000   2.00000   2.50000   3.0  3.50  4.0000
+#> 3 quantidade    1.1110 1234567.12    1.54656    3.2888   5.46660   9.82220  12.20000  12.6 13.00 13.0566
+#> 4   continua -123.1234   12345.00 -119.48970 -104.9549 -86.78638 -50.44936 -14.11234  -1.6 -1.00 -0.4000
+#> # ... with 14 more variables: `70%` <dbl>, `80%` <dbl>, `90%` <dbl>, `95%` <dbl>, `99%` <dbl>,
+#> #   mean <dbl>, sd <dbl>, na <int>, val <int>, neg <int>, zero <int>, pos <int>, unq <int>, mdp <dbl>
 ```
 
 Then we could set some tests to be run on the variables (read the vignette for more information on how to set up these tests)
 
-```
-X %>%
-  diagnose(exams) %>%
-  issues()
-  
+```r
+X %>% diagnose(exams) %>% issues()
 #> Issues found in 'dinheiro'
 #>     More than 25% of entries are NAs
 #> Issues found in 'contagem'
@@ -49,11 +43,8 @@ X %>%
 
 Finally we could compare multiple versions of a table over time
 
-```
-X %>%
-  compare(X[1:5, ]) %>%
-  issues()
-  
+```r
+X_jan %>% compare(X_feb) %>% issues()
 #> No issues found in 'dinheiro'
 #> No issues found in 'contagem'
 #> Issues found in 'quantidade'
