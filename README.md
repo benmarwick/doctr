@@ -2,7 +2,7 @@
 
 This is an R package to help check data consistency. In short, it attempts to automate as much as possible the task of verifying if everything is ok with a dataset.
 
-`doctr` has 3 main functions: `examine`, `diagnose`, and `compare`. The first one creates an exploratory analysis of the columns in a table, the second one runs some user specified tests on the variables of a table and returns comprehensive reports about how the variables did, while the last one compares two tables to see if they considered similar enough (usefull when we are analysing a dataset over time).
+`doctr` has 3 main functions: `examine`, `diagnose`, and `compare`. The first one generates an exploratory analysis of a table, the second one runs some user specified tests on the variables of a dataset and returns comprehensive reports with the results, while the last one compares two tables to see if they could be considered similar enough (usefull when we are analysing a dataset over time).
 
 ### Example
 
@@ -21,7 +21,7 @@ X %>% examine() %>% summary_dbl()
 #> #   mean <dbl>, sd <dbl>, na <int>, val <int>, neg <int>, zero <int>, pos <int>, unq <int>, mdp <dbl>
 ```
 
-Then we could set some tests to be run on the variables (read the vignette for more information on how to set up these tests)
+Then we could set some tests to be run on the variables with `diagnose` (read the vignette for more information on how to set up these tests)
 
 ```r
 X %>% diagnose(exams) %>% issues()
@@ -41,7 +41,7 @@ X %>% diagnose(exams) %>% issues()
 #>     There are 2 classes that represent less than 50% of the total
 ```
 
-Finally we could compare multiple versions of a table over time
+Finally we could compare multiple versions of a table over time with the help of `compare`
 
 ```r
 X_jan %>% compare(X_feb) %>% issues()
@@ -65,12 +65,5 @@ X_jan %>% compare(X_feb) %>% issues()
 #>     New value for 'pos' is too low
 #> No issues found in 'categorica'
 ```
-
-
-
-
-
-
-
 
 

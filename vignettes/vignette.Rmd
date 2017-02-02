@@ -188,21 +188,3 @@ Depois disso o médico diagnostica seu paciente; sabendo os dados vitais da pess
 Depois de medicar o paciente (que nesse caso seria tratar a base até que ela passe nos exames), o médico avalia a sua evolução. A função `compare` cria perfis (uma "ficha clínica") para cada coluna de duas entregas de uma mesma base e retorna alertas quando um perfil está muito diferente do outro.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
