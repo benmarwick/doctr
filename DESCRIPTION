@@ -1,7 +1,7 @@
 Package: doctr
-Title: What the Package Does (one line, title case)
+Title: a package to help check data consistency
 Version: 0.0.0.9000
-Authors@R: c(person("Caio", "Lente", email = "ctlente@gmail.com", role = c("aut", "cre")), person("Daniel", "Falbel", email = "", role = c("aut")))
+Authors@R: c(person("Caio", "Lente", email = "ctlente@gmail.com", role = c("aut", "cre")), person("Daniel", "Falbel", email = "dfalbel@gmail.com", role = c("ctb")))
 Description: What the package does (one paragraph).
 Depends:
     R (>= 3.2.3)
