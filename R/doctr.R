@@ -33,19 +33,29 @@ translate <- function(types) {
 #' Return summary of columns of doubles in a table
 #' 
 #' @param X list created by 'examine'
+#' @param group group from which to retrieve summary
 #' 
 #' @export
-summary_dbl <- function(X) {
-  return(tibble::as_tibble(X[[1]]))
+summary_dbl <- function(X, group = "") {
+  if (group == "") {
+    return(tibble::as_tibble(X[[1]]))
+  }
+  
+  return(tibble::as_tibble(X[[group]][[1]]))
 }
 
 #' Return summary of columns of characters in a table
 #' 
 #' @param X list created by 'examine'
+#' @param group group from which to retrieve summary
 #' 
 #' @export
-summary_chr <- function(X) {
-  return(tibble::as_tibble(X[[2]]))
+summary_chr <- function(X, group = "") {
+  if (group == "") {
+    return(tibble::as_tibble(X[[2]]))
+  }
+  
+  return(tibble::as_tibble(X[[group]][[2]]))
 }
 
 
@@ -466,12 +476,10 @@ profile <- function(X) {
 
 ## MAIN -------------------------------------------------------------
 
-#' Create summary statistics for every column in 'X'
+#' Create summary statistics for every column in 'X' (no grouping)
 #' 
 #' @param X table to be examined
-#' 
-#' @export
-examine <- function(X) {
+examine_ <- function(X) {
   cols <- names(X)
   
   X <- X %>%
@@ -487,9 +495,9 @@ examine <- function(X) {
   for (i in 1:length(X)) {
     X[[i]] <- switch(
       typeof(X[[i]]$data),
-      double = profile_dbl(X[[i]]),
-      integer = profile_dbl(X[[i]]),
-      character = profile_chr(X[[i]])
+      double = suppressWarnings(profile_dbl(X[[i]])),
+      integer = suppressWarnings(profile_dbl(X[[i]])),
+      character = suppressWarnings(profile_chr(X[[i]]))
     )
     
     if (typeof(X[[i]]$data) == "character") {
@@ -505,6 +513,28 @@ examine <- function(X) {
   }
   
   return(list(doubles, characters))
+}
+
+#' Create summary statistics for every column in 'X'
+#' 
+#' @param X table to be examined
+#' @param group variable to group X by before examining
+#' 
+#' @export
+examine <- function(X, group = 0) {
+  if (group == 0) {
+    return(examine_(X))
+  }
+  
+  if (!is.numeric(group)) {
+    group <- grep(group, names(X))
+  }
+  
+  X <- X %>%
+    split(.[[group]]) %>%
+    purrr::map(examine_)
+  
+  return(X)
 }
 
 #' Run tests on a table to check if it fits it's expected form

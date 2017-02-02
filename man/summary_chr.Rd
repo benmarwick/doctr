@@ -4,10 +4,12 @@
 \alias{summary_chr}
 \title{Return summary of columns of characters in a table}
 \usage{
-summary_chr(X)
+summary_chr(X, group = "")
 }
 \arguments{
 \item{X}{list created by 'examine'}
+
+\item{group}{group from which to retrieve summary}
 }
 \description{
 Return summary of columns of characters in a table

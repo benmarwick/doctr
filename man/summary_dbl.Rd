@@ -4,10 +4,12 @@
 \alias{summary_dbl}
 \title{Return summary of columns of doubles in a table}
 \usage{
-summary_dbl(X)
+summary_dbl(X, group = "")
 }
 \arguments{
 \item{X}{list created by 'examine'}
+
+\item{group}{group from which to retrieve summary}
 }
 \description{
 Return summary of columns of doubles in a table

@@ -4,10 +4,12 @@
 \alias{examine}
 \title{Create summary statistics for every column in 'X'}
 \usage{
-examine(X)
+examine(X, group = 0)
 }
 \arguments{
 \item{X}{table to be examined}
+
+\item{group}{variable to group X by before examining}
 }
 \description{
 Create summary statistics for every column in 'X'
