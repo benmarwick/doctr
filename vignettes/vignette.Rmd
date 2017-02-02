@@ -21,15 +21,10 @@ library(stringr)
 library(magrittr)
 library(readr)
 library(tibble)
-library(devtools)
+library(doctr)
 ```
 
 Para instalar o pacote, apenas rode o seguinte código (note que o caminho para o arquivo provavelmente não será esse):
-
-```{r, message = FALSE}
-devtools::install_local("/home/caio/doctr/")
-library(doctr)
-```
 
 Agora que temos o pacote, podemos ler os dados que desejamos analisar. Não existe nenhuma recomendação muito específica para esse passo, mas precisamos que todos os missings sejam `NA` (e não strings vazias) e que strings não sejam tratadas como fatores. Isso já está implementado perfeitamente em `readr::read_csv` (ou `readr::read_delim` para arquivos separados por ponto-e-vírgula) e em `readxl::read_excel`.
 
