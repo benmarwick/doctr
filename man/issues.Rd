@@ -14,4 +14,3 @@ issues(X, i = 0)
 \description{
 Print messages with issues found in 'X' (or in one of its columns)
 }
-

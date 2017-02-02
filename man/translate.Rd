@@ -12,4 +12,3 @@ translate(types)
 \description{
 Convert vector of types to corresponding functions
 }
-

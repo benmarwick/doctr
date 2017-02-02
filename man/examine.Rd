@@ -12,4 +12,3 @@ examine(X)
 \description{
 Create summary statistics for every column in 'X'
 }
-

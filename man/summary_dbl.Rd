@@ -12,4 +12,3 @@ summary_dbl(X)
 \description{
 Return summary of columns of doubles in a table
 }
-

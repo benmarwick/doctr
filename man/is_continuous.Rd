@@ -3,9 +3,9 @@
 \name{is_continuous}
 \alias{is_continuous}
 \alias{is_count}
-\alias{is_money}
-\alias{is_percentage}
 \alias{is_quantity}
+\alias{is_percentage}
+\alias{is_money}
 \title{Check if 'x$data' is a continuous variable}
 \usage{
 is_continuous(x, min_val = -Inf, max_val = Inf, max_na = 1,
@@ -44,4 +44,3 @@ Check if 'x$data' is a percentage variable
 
 Check if 'x$data' is a money variable
 }
-

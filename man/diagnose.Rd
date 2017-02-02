@@ -14,4 +14,3 @@ diagnose(X, exams)
 \description{
 Run tests on a table to check if it fits it's expected form
 }
-
