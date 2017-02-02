@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.org/clente/doctr.svg?branch=master)](https://travis-ci.org/clente/doctr)
+
 # doctr
 
 This is an R package to help check data consistency. In short, it attempts to automate as much as possible the task of verifying if everything is ok with a dataset.
