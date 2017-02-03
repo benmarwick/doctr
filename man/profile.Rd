@@ -12,4 +12,3 @@ profile(X)
 \description{
 Create profile of every column in X
 }
-

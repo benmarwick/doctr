@@ -14,4 +14,3 @@ examine(X, group = 0)
 \description{
 Create summary statistics for every column in 'X'
 }
-

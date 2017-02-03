@@ -14,4 +14,3 @@ check_len(x, len)
 \description{
 Check if 'x$data' has length > 'len'
 }
-

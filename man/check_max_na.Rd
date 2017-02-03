@@ -16,4 +16,3 @@ check_max_na(x, max_na, rm_na = FALSE)
 \description{
 Check if fraction of 'x$data' that is NA is <= 'max_na'
 }
-

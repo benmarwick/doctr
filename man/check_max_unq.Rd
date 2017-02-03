@@ -14,4 +14,3 @@ check_max_unq(x, max_unq)
 \description{
 Check if there aren't more than 'max_unq' classes in 'x$data'
 }
-

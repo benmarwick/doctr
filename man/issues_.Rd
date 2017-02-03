@@ -14,4 +14,3 @@ issues_(x, name)
 \description{
 Create message with issues found in x
 }
-
