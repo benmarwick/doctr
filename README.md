@@ -1,4 +1,4 @@
-[![Travis-CI Build Status](https://travis-ci.org/clente/doctr.svg?branch=master)](https://travis-ci.org/clente/doctr)
+
 
 # doctr
 
