@@ -404,7 +404,7 @@ profile_dbl <- function(x) {
   x$zero <- sum(x$data == 0, na.rm = TRUE)/length(x$data)
   x$pos <- sum(x$data > 0, na.rm = TRUE)/length(x$data)
   
-  x$unq <- length(unique(x$data))
+  x$unq <- length(unique(x$data))/length(x$data)
   
   dp <- stringr::str_length(stringr::str_extract(as.character(x$data), "\\.[0-9]*")) - 1
   dp[is.na(dp)] <- 0
@@ -435,11 +435,11 @@ profile_chr <- function(x) {
   
   x$unq <- length(unique(x$data))/length(x$data)
   
-  sample <- paste(sample(x$data, 100, replace = TRUE), collapse = "")
-  x$asc <- ifelse(as.character(readr::guess_encoding(charToRaw(sample))[1, 1])
+  str <- paste(x$data, collapse = "")
+  x$asc <- ifelse(as.character(readr::guess_encoding(charToRaw(str))[1, 1])
                   == "ASCII", 1, 0)
-  x$ltr <- stringr::str_count(sample, "[a-zA-Z ]")/stringr::str_length(sample)
-  x$num <- stringr::str_count(sample, "[0-9]")/stringr::str_length(sample)
+  x$ltr <- stringr::str_count(str, "[a-zA-Z ]")/stringr::str_length(str)
+  x$num <- stringr::str_count(str, "[0-9]")/stringr::str_length(str)
   
   return(x)
 }
@@ -582,14 +582,15 @@ diagnose <- function(X, exams) {
 #' 
 #' @param X table used as standard for comparison
 #' @param Y table to be evaluated
+#' @param samples number of samples of X to be used for the CI
 #' 
 #' @export
-compare <- function(X, Y) {
+compare <- function(X, Y, samples = 100) {
   prof_X <- profile(X)
   prof_Y <- profile(Y)
   
-  results <- prof_X
-  results <- results %>% purrr::map(~list(.x))
+  results <- prof_X %>%
+    purrr::map(~list(.x))
   results <- mapply(append, results, TRUE, SIMPLIFY = FALSE)
   results <- results %>%
     purrr::map(function(.x) {
@@ -607,46 +608,47 @@ compare <- function(X, Y) {
   
   results$meta <- NULL
   
-  sample_X <- map(1:10, function(x, data){
-    sample_n(data, 1000, TRUE)
-  }, data = mtcars) %>%
-    map(~doctr:::profile(.x)) %>%
-    transpose()
+  sample_X <- purrr::map(1:100, function(x, data){
+    dplyr::sample_n(data, nrow(data), TRUE)
+  }, data = X) %>%
+    purrr::map(~profile(.x)) %>%
+    purrr::transpose()
   
   sample_X$meta <- NULL
   
   sample_X <- sample_X %>%
-    map(~transpose(.x)) %>%
-    map(function(.x) {
-      .x <- map(.x, flatten_dbl)
+    purrr::map(~purrr::transpose(.x)) %>%
+    purrr::map(function(.x) {
+      .x <- purrr::map(.x, purrr::flatten_dbl)
       
       for (i in 1:length(.x)) {
-        .x[[i]] <- as.numeric(quantile(.x[[i]], c(0.025, 0.975)))
+        .x[[i]] <- as.numeric(
+          stats::quantile(.x[[i]], c(0.025, 0.975), na.rm = TRUE)
+        )
       }
       .x
     })
   
-  msg <- "X and Y differed significantly for\n"
-  flag <- TRUE
   for (i in 1:(length(prof_Y) - 1)) {
     for (j in 1:length(prof_Y[[i]])) {
-      if (abs(prof_Y[[i]][[j]]) > abs(sample_X[[i]][[j]][2])) {
-        results[[i]]$result <- FALSE
-        results[[i]][[names(prof_X[[i]])[j]]] <- paste0(
-          "New value for '",
-          names(prof_X[[i]])[j],
-          "' is too high"
-        )
-        flag = FALSE
-      }
-      else if (abs(prof_Y[[i]][[j]]) < abs(sample_X[[i]][[j]][1])) {
-        results[[i]]$result <- FALSE
-        results[[i]][[names(prof_X[[i]])[j]]] <- paste0(
-          "New value for '",
-          names(prof_X[[i]])[j],
-          "' is too low"
-        )
-        flag = FALSE
+      
+      if (names(prof_X[[i]])[j] != "unq") {
+        if (prof_Y[[i]][[j]] > sample_X[[i]][[j]][2]) {
+          results[[i]]$result <- FALSE
+          results[[i]][[names(prof_X[[i]])[j]]] <- paste0(
+            "New value for '",
+            names(prof_X[[i]])[j],
+            "' is too high"
+          )
+        }
+        else if (prof_Y[[i]][[j]] < sample_X[[i]][[j]][1]) {
+          results[[i]]$result <- FALSE
+          results[[i]][[names(prof_X[[i]])[j]]] <- paste0(
+            "New value for '",
+            names(prof_X[[i]])[j],
+            "' is too low"
+          )
+        }
       }
     }
   }
