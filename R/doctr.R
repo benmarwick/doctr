@@ -585,10 +585,10 @@ diagnose <- function(X, exams) {
 #' 
 #' @export
 compare <- function(X, Y) {
-  X <- profile(X)
-  Y <- profile(Y)
+  prof_X <- profile(X)
+  prof_Y <- profile(Y)
   
-  results <- X
+  results <- prof_X
   results <- results %>% purrr::map(~list(.x))
   results <- mapply(append, results, TRUE, SIMPLIFY = FALSE)
   results <- results %>%
@@ -598,7 +598,7 @@ compare <- function(X, Y) {
     })
   
   for (i in 1:3) {
-    if (X$meta[[i]] != Y$meta[[i]]) {
+    if (prof_X$meta[[i]] != prof_Y$meta[[i]]) {
       results$meta$result <- FALSE
       results$meta$meta <- "Metadata for both tables is different"
       return(list(meta = results$meta))
@@ -607,24 +607,43 @@ compare <- function(X, Y) {
   
   results$meta <- NULL
   
+  sample_X <- map(1:10, function(x, data){
+    sample_n(data, 1000, TRUE)
+  }, data = mtcars) %>%
+    map(~doctr:::profile(.x)) %>%
+    transpose()
+  
+  sample_X$meta <- NULL
+  
+  sample_X <- sample_X %>%
+    map(~transpose(.x)) %>%
+    map(function(.x) {
+      .x <- map(.x, flatten_dbl)
+      
+      for (i in 1:length(.x)) {
+        .x[[i]] <- as.numeric(quantile(.x[[i]], c(0.025, 0.975)))
+      }
+      .x
+    })
+  
   msg <- "X and Y differed significantly for\n"
   flag <- TRUE
-  for (i in 1:(length(X) - 1)) {
-    for (j in 1:length(X[[i]])) {
-      if (abs(Y[[i]][[j]]) > abs(X[[i]][[j]]) * 1.5) {
+  for (i in 1:(length(prof_Y) - 1)) {
+    for (j in 1:length(prof_Y[[i]])) {
+      if (abs(prof_Y[[i]][[j]]) > abs(sample_X[[i]][[j]][2])) {
         results[[i]]$result <- FALSE
-        results[[i]][[names(X[[i]])[j]]] <- paste0(
+        results[[i]][[names(prof_X[[i]])[j]]] <- paste0(
           "New value for '",
-          names(X[[i]])[j],
+          names(prof_X[[i]])[j],
           "' is too high"
         )
         flag = FALSE
       }
-      if (abs(Y[[i]][[j]]) < abs(X[[i]][[j]]) * 0.5) {
+      else if (abs(prof_Y[[i]][[j]]) < abs(sample_X[[i]][[j]][1])) {
         results[[i]]$result <- FALSE
-        results[[i]][[names(X[[i]])[j]]] <- paste0(
+        results[[i]][[names(prof_X[[i]])[j]]] <- paste0(
           "New value for '",
-          names(X[[i]])[j],
+          names(prof_X[[i]])[j],
           "' is too low"
         )
         flag = FALSE
