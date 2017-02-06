@@ -397,12 +397,12 @@ profile_dbl <- function(x) {
   x$mean <- mean(x$data, na.rm = TRUE)
   x$sd <- stats::sd(x$data, na.rm = TRUE)
   
-  x$na <- sum(is.na(x$data))
-  x$val <- length(x$data) - x$na
+  x$na <- sum(is.na(x$data))/length(x$data)
+  x$val <- (length(x$data) - x$na)/length(x$data)
   
-  x$neg <- sum(x$data < 0, na.rm = TRUE)
-  x$zero <- sum(x$data == 0, na.rm = TRUE)
-  x$pos <- sum(x$data > 0, na.rm = TRUE)
+  x$neg <- sum(x$data < 0, na.rm = TRUE)/length(x$data)
+  x$zero <- sum(x$data == 0, na.rm = TRUE)/length(x$data)
+  x$pos <- sum(x$data > 0, na.rm = TRUE)/length(x$data)
   
   x$unq <- length(unique(x$data))
   
@@ -430,10 +430,10 @@ profile_chr <- function(x) {
   x$mean <- mean(str_len, na.rm = TRUE)
   x$sd <- stats::sd(str_len, na.rm = TRUE)
   
-  x$na <- sum(is.na(x$data))
-  x$val <- length(x$data) - x$na
+  x$na <- sum(is.na(x$data))/length(x$data)
+  x$val <- (length(x$data) - x$na)/length(x$data)
   
-  x$unq <- length(unique(x$data))
+  x$unq <- length(unique(x$data))/length(x$data)
   
   sample <- paste(sample(x$data, 100, replace = TRUE), collapse = "")
   x$asc <- ifelse(as.character(readr::guess_encoding(charToRaw(sample))[1, 1])
