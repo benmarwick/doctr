@@ -16,3 +16,4 @@ check_min_na(x, min_na, rm_na = FALSE)
 \description{
 Check if fraction of 'x$data' that is NA is => 'min_na'
 }
+

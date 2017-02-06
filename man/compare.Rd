@@ -14,3 +14,4 @@ compare(X, Y)
 \description{
 Compare the profiles of two tables
 }
+

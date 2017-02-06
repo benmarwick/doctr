@@ -14,3 +14,4 @@ summary_dbl(X, group = "")
 \description{
 Return summary of columns of doubles in a table
 }
+

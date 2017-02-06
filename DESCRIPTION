@@ -15,7 +15,8 @@ Imports:
     magrittr,
     readr,
     tibble
-RoxygenNote: 6.0.0
-Suggests: knitr,
+RoxygenNote: 5.0.1
+Suggests:
+    knitr,
     rmarkdown
 VignetteBuilder: knitr

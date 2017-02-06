@@ -14,3 +14,4 @@ check_mdp(x, mdp)
 \description{
 Check if no entry of 'x$data' has more decimal places than 'mdp'
 }
+

@@ -14,3 +14,4 @@ check_min_unq(x, min_unq)
 \description{
 Check if there aren't less than 'min_unq' classes in 'x$data'
 }
+

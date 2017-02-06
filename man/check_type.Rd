@@ -14,3 +14,4 @@ check_type(x, type)
 \description{
 Check if 'x$data' is of type 'type'
 }
+

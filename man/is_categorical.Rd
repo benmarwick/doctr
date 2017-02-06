@@ -21,3 +21,4 @@ is_categorical(x, min_unq = 0, max_unq = Inf, max_na = 1,
 \description{
 Check if 'x$data' is a categorical variable
 }
+

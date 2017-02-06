@@ -12,3 +12,4 @@ profile_dbl(x)
 \description{
 Create profile for column of doubles
 }
+

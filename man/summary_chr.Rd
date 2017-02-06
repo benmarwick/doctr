@@ -14,3 +14,4 @@ summary_chr(X, group = "")
 \description{
 Return summary of columns of characters in a table
 }
+

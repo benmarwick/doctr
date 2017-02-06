@@ -12,3 +12,4 @@ profile_chr(x)
 \description{
 Create profile for column of characters
 }
+

@@ -14,3 +14,4 @@ check_max_val(x, max_val)
 \description{
 Check if no entry of 'x$data' is larger than 'max_val'
 }
+

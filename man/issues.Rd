@@ -4,13 +4,16 @@
 \alias{issues}
 \title{Print messages with issues found in 'X' (or in one of its columns)}
 \usage{
-issues(X, i = 0)
+issues(X, i = 0, verbose = TRUE)
 }
 \arguments{
 \item{X}{list of lists with data, result, and any errors already found for each column}
 
 \item{i}{index of column from which to print issues}
+
+\item{verbose}{specify the issues found in each column}
 }
 \description{
 Print messages with issues found in 'X' (or in one of its columns)
 }
+

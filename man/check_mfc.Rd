@@ -14,3 +14,4 @@ check_mfc(x, mfc)
 \description{
 Check if no classe represents more than 'mfc' of 'x$data'
 }
+

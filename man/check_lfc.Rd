@@ -14,3 +14,4 @@ check_lfc(x, lfc)
 \description{
 Check if all classes represent at least 'lfc' of 'x$data'
 }
+

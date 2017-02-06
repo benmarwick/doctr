@@ -4,13 +4,16 @@
 \alias{issues_}
 \title{Create message with issues found in x}
 \usage{
-issues_(x, name)
+issues_(x, name, verbose)
 }
 \arguments{
 \item{x}{list with data, result, and any errors already found}
 
 \item{name}{name of column referring to 'x'}
+
+\item{verbose}{specify the issues found in each column}
 }
 \description{
 Create message with issues found in x
 }
+

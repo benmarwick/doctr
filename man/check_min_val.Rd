@@ -14,3 +14,4 @@ check_min_val(x, min_val)
 \description{
 Check if no entry of 'x$data' is smaller than 'min_val'
 }
+
