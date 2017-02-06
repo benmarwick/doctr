@@ -23,7 +23,7 @@ X %>% examine() %>% summary_dbl()
 #> #   mean <dbl>, sd <dbl>, na <int>, val <int>, neg <int>, zero <int>, pos <int>, unq <int>, mdp <dbl>
 ```
 
-Then we could set some tests to be run on the variables with `diagnose` (read the vignette for more information on how to set up these tests)
+Then we could set some tests to be run on the variables with `diagnose` (read the vignette for more information on how to setup these tests)
 
 ```r
 X %>% diagnose(exams) %>% issues()
