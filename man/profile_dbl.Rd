@@ -7,7 +7,7 @@
 profile_dbl(x)
 }
 \arguments{
-\item{x}{list with data, and all of the summary statistics of that data}
+\item{x}{list with data of a column}
 }
 \description{
 Create profile for column of doubles

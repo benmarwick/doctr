@@ -11,16 +11,16 @@
 is_continuous(x, min_val = -Inf, max_val = Inf, max_na = 1,
   max_dec_places = Inf)
 
-is_count(x, min_val = 0, max_val = Inf, max_na = 1, max_dec_places = 0)
-
 is_quantity(x, min_val = 0, max_val = Inf, max_na = 1,
   max_dec_places = Inf)
 
-is_percentage(x, min_val = 0, max_val = 1, max_na = 1,
-  max_dec_places = Inf)
+is_count(x, min_val = 0, max_val = Inf, max_na = 1, max_dec_places = 0)
 
 is_money(x, min_val = 0, max_val = 10000, max_na = 1,
   max_dec_places = 2)
+
+is_percentage(x, min_val = 0, max_val = 1, max_na = 1,
+  max_dec_places = Inf)
 }
 \arguments{
 \item{x}{list with data, result, and any errors already found}
@@ -36,12 +36,12 @@ is_money(x, min_val = 0, max_val = 10000, max_na = 1,
 \description{
 Check if 'x$data' is a continuous variable
 
-Check if 'x$data' is a count variable
-
 Check if 'x$data' is a quantity variable
 
-Check if 'x$data' is a percentage variable
+Check if 'x$data' is a count variable
 
 Check if 'x$data' is a money variable
+
+Check if 'x$data' is a percentage variable
 }
 
