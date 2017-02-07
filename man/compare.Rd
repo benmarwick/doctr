@@ -4,14 +4,14 @@
 \alias{compare}
 \title{Compare the profiles of two tables}
 \usage{
-compare(X, Y, samples = 100)
+compare(X, Y, ci = 0.05)
 }
 \arguments{
 \item{X}{table used as standard for comparison}
 
 \item{Y}{table to be evaluated}
 
-\item{samples}{number of samples of X to be used for the CI}
+\item{ci}{percentage to be used for the CI}
 }
 \description{
 Compare the profiles of two tables

@@ -18,7 +18,8 @@ translate <- function(types) {
         count = is_count,
         quantity = is_quantity,
         continuous = is_continuous,
-        character = is_character
+        character = is_character,
+        categorical = is_categorical
       )
     )
   }
@@ -47,8 +48,7 @@ guess_exams <- function(X) {
 
   funs <- c()  
   for (i in 1:length(X)) {
-    if (typeof(X[[i]]$data) == "double" ||
-        typeof(X[[i]]$data) == "integer") {
+    if (class(X[[i]]$data) == "numeric" || class(X[[i]]$data) == "integer") {
       if (is_percentage(X[[i]])$result) {
         funs[i] <- "percentage"
       }
@@ -56,7 +56,7 @@ guess_exams <- function(X) {
                is_money(X[[i]])$result) {
         funs[i] <- "money"
       }
-      else if (doctr:::is_count(X[[i]])$result) {
+      else if (is_count(X[[i]])$result) {
         funs[i] <- "count"
       }
       else if (is_quantity(X[[i]])$result) {
@@ -66,8 +66,11 @@ guess_exams <- function(X) {
         funs[i] <- "continuous"
       }
     }
-    else {
+    else if (class(X[[i]]$data) == "character") {
       funs[i] <- "character"
+    }
+    else {
+      funs[i] <- "categorical"
     }
   }
   
@@ -77,20 +80,20 @@ guess_exams <- function(X) {
     min_unq = "", max_unq = "", least_frec_cls = ""
   )
   
-  return(as_tibble(exams))
+  return(tibble::as_tibble(exams))
 }
 
 
 
 ## SUMMARIES --------------------------------------------------------
 
-#' Return summary of columns of doubles in a table
+#' Return summary of columns of numerics in a table
 #' 
 #' @param X list created by 'examine'
 #' @param group group from which to retrieve summary
 #' 
 #' @export
-report_dbl <- function(X, group = "") {
+report_num <- function(X, group = "") {
   if (group == "") {
     return(tibble::as_tibble(X[[1]]))
   }
@@ -110,6 +113,20 @@ report_chr <- function(X, group = "") {
   }
   
   return(tibble::as_tibble(X[[group]][[2]]))
+}
+
+#' Return summary of columns of categoricals in a table
+#' 
+#' @param X list created by 'examine'
+#' @param group group from which to retrieve summary
+#' 
+#' @export
+report_fct <- function(X, group = "") {
+  if (group == "") {
+    return(tibble::as_tibble(X[[3]]))
+  }
+  
+  return(tibble::as_tibble(X[[group]][[3]]))
 }
 
 
@@ -184,7 +201,7 @@ check_len <- function(x, len) {
 #' @param x list with data, result, and any errors already found
 #' @param type 'x$data' should have
 check_type <- function(x, type) {
-  if (type != class(x$data)) {
+  if (stringr::str_detect(type, class(x$data))) {
     x$type <- paste0("Data isn't of type ", type)
     x$result <- FALSE
   }
@@ -381,7 +398,7 @@ is_continuous <- function(x, min_val = -Inf, max_val = Inf, max_na = 0.9, max_de
   
   x <- x %>%
     check_len(0) %>%
-    check_type("numeric") %>%
+    check_type("numeric ou integer") %>%
     check_max_na(max_na, TRUE) %>%
     check_mdp(max_dec_places) %>%
     check_max_val(max_val) %>%
@@ -418,6 +435,32 @@ is_percentage <- function(x, min_val = 0, max_val = 1, max_na = 0.9, max_dec_pla
   is_continuous(x, min_val, max_val, max_na, max_dec_places)
 }
 
+#' Check if 'x$data' is a categorical variable
+#' 
+#' @param x list with data, result, and any errors already found
+#' @param min_unq minimum number of unique classes 'x$data' can have
+#' @param max_unq maximum number of unique classes 'x$data' can have
+#' @param max_na fraction of 'x$data' that can be NA
+#' @param least_frec_cls minimum fraction of total represented by least frequent class
+#' 
+#' @rdname is_categorical
+is_categorical <- function(x, min_unq = 0, max_unq = Inf, max_na = 0.9, least_frec_cls = 0) {
+  min_unq <- as.numeric(min_unq)
+  max_unq <- as.numeric(max_unq)
+  max_na <- as.numeric(max_na)
+  least_frec_cls <- as.numeric(least_frec_cls)
+  
+  x <- x %>%
+    check_len(0) %>%
+    check_type("character") %>%
+    check_max_na(max_na, TRUE) %>%
+    check_min_unq(min_unq) %>%
+    check_max_unq(max_unq) %>%
+    check_lfc(least_frec_cls)
+  
+  return(x)
+}
+
 
 
 ## PROFILES ---------------------------------------------------------
@@ -430,17 +473,17 @@ profile_tbl <- function(X) {
   meta$ncol <- length(X)
   
   meta$names <- paste(names(X), collapse = " ")
-  meta$types <- paste(sapply(purrr::map(X, ~.x[[1]]), typeof), collapse = " ")
+  meta$types <- paste(sapply(purrr::map(X, ~.x[[1]]), class), collapse = " ")
   
   X$meta <- meta
   
   return(X)
 }
 
-#' Create profile for column of doubles
+#' Create profile for column of numerics
 #' 
 #' @param x list with data of a column
-profile_dbl <- function(x) {
+profile_num <- function(x) {
   x$len <- length(x$data)
   
   x$min <- min(x$data, na.rm = TRUE)
@@ -502,6 +545,15 @@ profile_chr <- function(x) {
   return(x)
 }
 
+#' Create profile for column of characters
+#' 
+#' @param x list with data of a column
+profile_fct <- function(x) {
+  x$len <- length(x$data)
+
+  return(x)
+}
+
 #' Create profile of every column in X
 #' 
 #' @param X table to be profiled
@@ -518,10 +570,11 @@ profile <- function(X) {
   X <- profile_tbl(X)
   for (i in 1:(length(X) - 1)) {
     X[[i]] <- switch(
-      typeof(X[[i]]$data),
-      double = profile_dbl(X[[i]]),
-      integer = profile_dbl(X[[i]]),
-      character = profile_chr(X[[i]])
+      class(X[[i]]$data),
+      numeric = profile_num(X[[i]]),
+      integer = profile_num(X[[i]]),
+      character = profile_chr(X[[i]]),
+      factor = profile_fct(X[[i]])
     )
   }
   
@@ -552,29 +605,34 @@ examine_ <- function(X) {
       .x
     })
   
-  doubles <- dplyr::tibble()
-  characters <- dplyr::tibble()
+  numeric <- dplyr::tibble()
+  character <- dplyr::tibble()
+  categorical <- dplyr::tibble()
   for (i in 1:length(X)) {
     X[[i]] <- switch(
-      typeof(X[[i]]$data),
-      double = suppressWarnings(profile_dbl(X[[i]])),
-      integer = suppressWarnings(profile_dbl(X[[i]])),
-      character = suppressWarnings(profile_chr(X[[i]]))
+      class(X[[i]]$data),
+      numeric = suppressWarnings(profile_num(X[[i]])),
+      integer = suppressWarnings(profile_num(X[[i]])),
+      character = suppressWarnings(profile_chr(X[[i]])),
+      factor = suppressWarnings(profile_fct(X[[i]]))
     )
     
-    if (typeof(X[[i]]$data) == "character") {
+    if (class(X[[i]]$data) == "numeric" || class(X[[i]]$data) == "integer") {
       X[[i]]$data <- NULL
       X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
-      characters <- dplyr::bind_rows(characters, X[[i]])
-    }
-    else {
+      numeric <- dplyr::bind_rows(numeric, X[[i]])
+    } else if (class(X[[i]]$data) == "character") {
       X[[i]]$data <- NULL
       X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
-      doubles <- dplyr::bind_rows(doubles, X[[i]])
+      character <- dplyr::bind_rows(character, X[[i]])
+    } else {
+      X[[i]]$data <- NULL
+      X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
+      categorical <- dplyr::bind_rows(categorical, X[[i]])
     }
   }
   
-  return(list(doubles, characters))
+  return(list(numeric, character, categorical))
 }
 
 #' Create summary statistics for every column in 'X'
