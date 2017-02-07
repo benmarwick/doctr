@@ -95,7 +95,7 @@ exams <- tibble::tibble(
     "dinheiro", "contagem", "quantidade", "continua", "categorica"
   ),
   funs = c(
-    "money", "count", "quantity", "continuous", "categorical"
+    "money", "count", "quantity", "continuous", "character"
   ),
   max_na = c(
     "0.25", "", "", "0", "0"
@@ -132,7 +132,7 @@ A coluna `cols` indica o nome da coluna de `X` em que o exame será rodado. `fun
 * `count`: devem ser valores positivos e inteiros
 * `quantity`: devem ser valores positivos
 * `continuous`: devem ser valores numéricos
-* `categorical`: devem ser textos
+* `character`: devem ser textos
 
 As outras colunas de `exams` são parâmetros customizáveis para os tipos especificados anteriormente:
 

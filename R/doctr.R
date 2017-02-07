@@ -18,7 +18,7 @@ translate <- function(types) {
         count = is_count,
         quantity = is_quantity,
         continuous = is_continuous,
-        categorical = is_categorical
+        character = is_character
       )
     )
   }
@@ -67,7 +67,7 @@ guess_exams <- function(X) {
       }
     }
     else {
-      funs[i] <- "categorical"
+      funs[i] <- "character"
     }
   }
   
@@ -184,7 +184,7 @@ check_len <- function(x, len) {
 #' @param x list with data, result, and any errors already found
 #' @param type 'x$data' should have
 check_type <- function(x, type) {
-  if (!stringr::str_detect(type, typeof(x$data))) {
+  if (type != class(x$data)) {
     x$type <- paste0("Data isn't of type ", type)
     x$result <- FALSE
   }
@@ -338,7 +338,7 @@ check_mfc <- function(x, mfc) {
 
 ## PRE-SET EXAMS ----------------------------------------------------
 
-#' Check if 'x$data' is a categorical variable
+#' Check if 'x$data' is a character variable
 #' 
 #' @param x list with data, result, and any errors already found
 #' @param min_unq minimum number of unique classes 'x$data' can have
@@ -346,8 +346,8 @@ check_mfc <- function(x, mfc) {
 #' @param max_na fraction of 'x$data' that can be NA
 #' @param least_frec_cls minimum fraction of total represented by least frequent class
 #' 
-#' @rdname is_categorical
-is_categorical <- function(x, min_unq = 0, max_unq = Inf, max_na = 0.9, least_frec_cls = 0) {
+#' @rdname is_character
+is_character <- function(x, min_unq = 0, max_unq = Inf, max_na = 0.9, least_frec_cls = 0) {
   min_unq <- as.numeric(min_unq)
   max_unq <- as.numeric(max_unq)
   max_na <- as.numeric(max_na)
@@ -381,7 +381,7 @@ is_continuous <- function(x, min_val = -Inf, max_val = Inf, max_na = 0.9, max_de
   
   x <- x %>%
     check_len(0) %>%
-    check_type("integer or double") %>%
+    check_type("numeric") %>%
     check_max_na(max_na, TRUE) %>%
     check_mdp(max_dec_places) %>%
     check_max_val(max_val) %>%
