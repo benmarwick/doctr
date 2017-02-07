@@ -36,7 +36,7 @@ translate <- function(types) {
 #' @param group group from which to retrieve summary
 #' 
 #' @export
-summary_dbl <- function(X, group = "") {
+report_dbl <- function(X, group = "") {
   if (group == "") {
     return(tibble::as_tibble(X[[1]]))
   }
@@ -50,7 +50,7 @@ summary_dbl <- function(X, group = "") {
 #' @param group group from which to retrieve summary
 #' 
 #' @export
-summary_chr <- function(X, group = "") {
+report_chr <- function(X, group = "") {
   if (group == "") {
     return(tibble::as_tibble(X[[2]]))
   }

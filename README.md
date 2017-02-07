@@ -11,7 +11,7 @@ This is an R package to help check data consistency. In short, it attempts to au
 We can use `examine` to get a sense of how our dataset looks like
 
 ```r
-X %>% examine() %>% summary_dbl()
+X %>% examine() %>% report_dbl()
 #> # A tibble: 4 × 25
 #>         name       min        max       `1%`      `5%`     `10%`     `20%`     `30%` `40%` `50%`   `60%`
 #>        <chr>     <dbl>      <dbl>      <dbl>     <dbl>     <dbl>     <dbl>     <dbl> <dbl> <dbl>   <dbl>

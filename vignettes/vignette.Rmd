@@ -65,8 +65,8 @@ Esta função precisa de apenas uma entrada: `X` (a tabela a ser examinada). A p
 Se rodarmos o código a seguir, obteremos as análises exploratórias.
 
 ```{r, message = FALSE}
-numericas <- doctr::summary_dbl(doctr::examine(X))
-categoricas <- doctr::summary_chr(doctr::examine(X))
+numericas <- doctr::report_dbl(doctr::examine(X))
+categoricas <- doctr::report_chr(doctr::examine(X))
 ```
 
 Como ambas as tabelas são muito grandes para serem mostradas, fica aqui um resumo do que cada uma de suas colunas representa:
