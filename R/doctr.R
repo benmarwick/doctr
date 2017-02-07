@@ -441,6 +441,8 @@ profile_tbl <- function(X) {
 #' 
 #' @param x list with data of a column
 profile_dbl <- function(x) {
+  x$len <- length(x$data)
+  
   x$min <- min(x$data, na.rm = TRUE)
   x$max <- max(x$data, na.rm = TRUE)
   
@@ -458,7 +460,7 @@ profile_dbl <- function(x) {
   x$zero <- sum(x$data == 0, na.rm = TRUE)/length(x$data)
   x$pos <- sum(x$data > 0, na.rm = TRUE)/length(x$data)
   
-  x$unq <- length(unique(x$data))/length(x$data)
+  x$unq <- length(unique(x$data))
   
   dp <- stringr::str_length(stringr::str_extract(as.character(x$data), "\\.[0-9]*")) - 1
   dp[is.na(dp)] <- 0
@@ -471,6 +473,8 @@ profile_dbl <- function(x) {
 #' 
 #' @param x list with data of a column
 profile_chr <- function(x) {
+  x$len <- length(x$data)
+  
   str_len <- suppressWarnings(stringr::str_length(x$data))
   str_len[is.na(str_len)] <- 0
   
@@ -487,7 +491,7 @@ profile_chr <- function(x) {
   x$na <- sum(is.na(x$data))/length(x$data)
   x$val <- (length(x$data) - x$na)/length(x$data)
   
-  x$unq <- length(unique(x$data))/length(x$data)
+  x$unq <- length(unique(x$data))
   
   str <- paste(x$data, collapse = "")
   x$asc <- ifelse(as.character(readr::guess_encoding(charToRaw(str))[1, 1])
@@ -636,10 +640,10 @@ diagnose <- function(X, exams) {
 #' 
 #' @param X table used as standard for comparison
 #' @param Y table to be evaluated
-#' @param samples number of samples of X to be used for the CI
+#' @param ci percentage to be used for the CI
 #' 
 #' @export
-compare <- function(X, Y, samples = 100) {
+compare <- function(X, Y, ci = 0.05) {
   prof_X <- profile(X)
   prof_Y <- profile(Y)
   
@@ -677,7 +681,7 @@ compare <- function(X, Y, samples = 100) {
       
       for (i in 1:length(.x)) {
         .x[[i]] <- as.numeric(
-          stats::quantile(.x[[i]], c(0.025, 0.975), na.rm = TRUE)
+          stats::quantile(.x[[i]], c(ci/2, 1 - ci/2), na.rm = TRUE)
         )
       }
       .x
@@ -686,7 +690,25 @@ compare <- function(X, Y, samples = 100) {
   for (i in 1:(length(prof_Y) - 1)) {
     for (j in 1:length(prof_Y[[i]])) {
       
-      if (names(prof_X[[i]])[j] != "unq") {
+      if (names(prof_X[[i]])[j] == "unq") {
+        if (prof_Y[[i]][[j]] > prof_X[[i]][[j]] * 1.5) {
+          results[[i]]$result <- FALSE
+          results[[i]][[names(prof_X[[i]])[j]]] <- paste0(
+            "New value for '",
+            names(prof_X[[i]])[j],
+            "' is too high"
+          )
+        }
+        else if (prof_Y[[i]][[j]] < prof_X[[i]][[j]] * 0.5) {
+          results[[i]]$result <- FALSE
+          results[[i]][[names(prof_X[[i]])[j]]] <- paste0(
+            "New value for '",
+            names(prof_X[[i]])[j],
+            "' is too low"
+          )
+        }
+      }
+      else if (names(prof_X[[i]])[j] != "len") {
         if (prof_Y[[i]][[j]] > sample_X[[i]][[j]][2]) {
           results[[i]]$result <- FALSE
           results[[i]][[names(prof_X[[i]])[j]]] <- paste0(
