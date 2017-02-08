@@ -724,12 +724,12 @@ compare <- function(X, Y, ci = 0.05) {
   prof_Y <- profile(Y)
   
   prof_X <- prof_X %>%
-    map(function(.x) {
+    purrr::map(function(.x) {
       .x$list <- NULL
       .x
     })
   prof_Y <- prof_Y %>%
-    map(function(.x) {
+    purrr::map(function(.x) {
       .x$list <- NULL
       .x
     })
@@ -757,8 +757,8 @@ compare <- function(X, Y, ci = 0.05) {
     dplyr::sample_n(data, nrow(data), TRUE)
   }, data = X) %>%
     purrr::map(~profile(.x)) %>%
-    map(function(.x) {
-      map(.x, function(.x) {
+    purrr::map(function(.x) {
+      purrr::map(.x, function(.x) {
         .x$list <- NULL
         .x
       })

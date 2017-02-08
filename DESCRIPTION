@@ -14,7 +14,8 @@ Imports:
     stringr,
     magrittr,
     readr,
-    tibble
+    tibble,
+    tidyr
 RoxygenNote: 5.0.1
 Suggests:
     knitr,
