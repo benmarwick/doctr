@@ -123,10 +123,16 @@ report_chr <- function(X, group = "") {
 #' @export
 report_fct <- function(X, group = "") {
   if (group == "") {
-    return(tibble::as_tibble(X[[3]]))
+    X <- tibble::as_tibble(X[[3]]) %>%
+      dplyr::select(-unq) %>%
+      tidyr::unnest()
+    return(X)
   }
   
-  return(tibble::as_tibble(X[[group]][[3]]))
+  X <- tibble::as_tibble(X[[group]][[3]]) %>%
+    dplyr::select(-unq) %>%
+    tidyr::unnest()
+  return(X)
 }
 
 
@@ -201,7 +207,7 @@ check_len <- function(x, len) {
 #' @param x list with data, result, and any errors already found
 #' @param type 'x$data' should have
 check_type <- function(x, type) {
-  if (stringr::str_detect(type, class(x$data))) {
+  if (stringr::str_detect(class(x$data), type)) {
     x$type <- paste0("Data isn't of type ", type)
     x$result <- FALSE
   }
@@ -549,7 +555,19 @@ profile_chr <- function(x) {
 #' 
 #' @param x list with data of a column
 profile_fct <- function(x) {
-  x$len <- length(x$data)
+  x$unq <- length(unique(x$data))
+  
+  l <- tibble::as_tibble(x = list(data = x$data)) %>%
+    dplyr::group_by(data) %>%
+    dplyr::summarise(cnt = n())
+  
+  tot <- sum(l$cnt)
+  
+  l <- l %>%
+    dplyr::mutate(frq = cnt/tot) %>%
+    list()
+  
+  x$list <- l
 
   return(x)
 }
@@ -705,6 +723,17 @@ compare <- function(X, Y, ci = 0.05) {
   prof_X <- profile(X)
   prof_Y <- profile(Y)
   
+  prof_X <- prof_X %>%
+    map(function(.x) {
+      .x$list <- NULL
+      .x
+    })
+  prof_Y <- prof_Y %>%
+    map(function(.x) {
+      .x$list <- NULL
+      .x
+    })
+  
   results <- prof_X %>%
     purrr::map(~list(.x))
   results <- mapply(append, results, TRUE, SIMPLIFY = FALSE)
@@ -728,6 +757,12 @@ compare <- function(X, Y, ci = 0.05) {
     dplyr::sample_n(data, nrow(data), TRUE)
   }, data = X) %>%
     purrr::map(~profile(.x)) %>%
+    map(function(.x) {
+      map(.x, function(.x) {
+        .x$list <- NULL
+        .x
+      })
+    }) %>%
     purrr::transpose()
   
   sample_X$meta <- NULL
@@ -766,7 +801,7 @@ compare <- function(X, Y, ci = 0.05) {
           )
         }
       }
-      else if (names(prof_X[[i]])[j] != "len") {
+      else if (names(prof_X[[i]])[j] != "len" && names(prof_X[[i]])[j] != "list") {
         if (prof_Y[[i]][[j]] > sample_X[[i]][[j]][2]) {
           results[[i]]$result <- FALSE
           results[[i]][[names(prof_X[[i]])[j]]] <- paste0(
