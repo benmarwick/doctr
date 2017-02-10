@@ -80,6 +80,13 @@ guess_exams <- function(X) {
     min_unq = "", max_unq = "", least_frec_cls = ""
   )
   
+  msg <- "Parsed with column specification:\ncols(\n"
+  for (i in 1:length(cols)) {
+    msg <- stringr::str_c(msg, "    ", cols[i], " = ", funs[i], "\n")
+  }
+  msg <- stringr::str_c(msg, ")")
+  message(msg)
+  
   return(tibble::as_tibble(exams))
 }
 
@@ -430,7 +437,7 @@ is_count <- function(x, min_val = 0, max_val = Inf, max_na = 0.9, max_dec_places
 #' Check if 'x$data' is a money variable
 #'
 #' @rdname is_continuous
-is_money <- function(x, min_val = 0, max_val = 10000, max_na = 0.9, max_dec_places = 2) {
+is_money <- function(x, min_val = 0, max_val = Inf, max_na = 0.9, max_dec_places = 2) {
   is_continuous(x, min_val, max_val, max_na, max_dec_places)
 }
 
@@ -503,7 +510,7 @@ profile_num <- function(x) {
   x$sd <- stats::sd(x$data, na.rm = TRUE)
   
   x$na <- sum(is.na(x$data))/length(x$data)
-  x$val <- (length(x$data) - x$na)/length(x$data)
+  x$val <- sum(!is.na(x$data))/length(x$data)
   
   x$neg <- sum(x$data < 0, na.rm = TRUE)/length(x$data)
   x$zero <- sum(x$data == 0, na.rm = TRUE)/length(x$data)
@@ -538,11 +545,11 @@ profile_chr <- function(x) {
   x$sd <- stats::sd(str_len, na.rm = TRUE)
   
   x$na <- sum(is.na(x$data))/length(x$data)
-  x$val <- (length(x$data) - x$na)/length(x$data)
+  x$val <- sum(!is.na(x$data))/length(x$data)
   
   x$unq <- length(unique(x$data))
   
-  str <- paste(x$data, collapse = "")
+  str <- paste(x$data[!is.na(x$data)], collapse = "")
   x$asc <- ifelse(as.character(readr::guess_encoding(charToRaw(str))[1, 1])
                   == "ASCII", 1, 0)
   x$ltr <- stringr::str_count(str, "[a-zA-Z ]")/stringr::str_length(str)
@@ -627,26 +634,28 @@ examine_ <- function(X) {
   character <- dplyr::tibble()
   categorical <- dplyr::tibble()
   for (i in 1:length(X)) {
-    X[[i]] <- switch(
-      class(X[[i]]$data),
-      numeric = suppressWarnings(profile_num(X[[i]])),
-      integer = suppressWarnings(profile_num(X[[i]])),
-      character = suppressWarnings(profile_chr(X[[i]])),
-      factor = suppressWarnings(profile_fct(X[[i]]))
-    )
-    
-    if (class(X[[i]]$data) == "numeric" || class(X[[i]]$data) == "integer") {
-      X[[i]]$data <- NULL
-      X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
-      numeric <- dplyr::bind_rows(numeric, X[[i]])
-    } else if (class(X[[i]]$data) == "character") {
-      X[[i]]$data <- NULL
-      X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
-      character <- dplyr::bind_rows(character, X[[i]])
-    } else {
-      X[[i]]$data <- NULL
-      X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
-      categorical <- dplyr::bind_rows(categorical, X[[i]])
+    if (length(class(X[[i]]$data)) == 1) {
+      X[[i]] <- switch(
+        class(X[[i]]$data),
+        numeric = suppressWarnings(profile_num(X[[i]])),
+        integer = suppressWarnings(profile_num(X[[i]])),
+        character = suppressWarnings(profile_chr(X[[i]])),
+        factor = suppressWarnings(profile_fct(X[[i]]))
+      )
+      
+      if (class(X[[i]]$data) == "numeric" || class(X[[i]]$data) == "integer") {
+        X[[i]]$data <- NULL
+        X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
+        numeric <- dplyr::bind_rows(numeric, X[[i]])
+      } else if (class(X[[i]]$data) == "character") {
+        X[[i]]$data <- NULL
+        X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
+        character <- dplyr::bind_rows(character, X[[i]])
+      } else {
+        X[[i]]$data <- NULL
+        X[[i]] <- unlist(list(list(name = cols[i]), X[[i]]), recursive = FALSE)
+        categorical <- dplyr::bind_rows(categorical, X[[i]])
+      }
     }
   }
   

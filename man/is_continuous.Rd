@@ -17,7 +17,7 @@ is_quantity(x, min_val = 0, max_val = Inf, max_na = 0.9,
 is_count(x, min_val = 0, max_val = Inf, max_na = 0.9,
   max_dec_places = 0)
 
-is_money(x, min_val = 0, max_val = 10000, max_na = 0.9,
+is_money(x, min_val = 0, max_val = Inf, max_na = 0.9,
   max_dec_places = 2)
 
 is_percentage(x, min_val = 0, max_val = 1, max_na = 0.9,
