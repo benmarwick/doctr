@@ -131,14 +131,17 @@ report_chr <- function(X, group = "") {
 report_fct <- function(X, group = "") {
   if (group == "") {
     X <- tibble::as_tibble(X[[3]]) %>%
-      dplyr::select(-unq) %>%
-      tidyr::unnest()
+      dplyr::select(-unq)
+    
+    X <- suppressWarnings(tidyr::unnest(X))
     return(X)
   }
   
   X <- tibble::as_tibble(X[[group]][[3]]) %>%
-    dplyr::select(-unq) %>%
-    tidyr::unnest()
+    dplyr::select(-unq)
+  
+  
+  X <- suppressWarnings(tidyr::unnest(X))
   return(X)
 }
 
