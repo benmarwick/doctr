@@ -24,11 +24,11 @@ library(tibble)
 library(doctr)
 ```
 
-Para instalar o pacote, apenas rode o seguinte código (note que o caminho para o arquivo provavelmente não será esse):
+Para instalar o pacote, apenas rode `devtools::install_git("ctlente/doctr")`.
 
-Agora que temos o pacote, podemos ler os dados que desejamos analisar. Não existe nenhuma recomendação muito específica para esse passo, mas precisamos que todos os missings sejam `NA` (e não strings vazias) e que strings não sejam tratadas como fatores. Isso já está implementado perfeitamente em `readr::read_csv` (ou `readr::read_delim` para arquivos separados por ponto-e-vírgula) e em `readxl::read_excel`.
+Agora que temos o pacote, podemos ler os dados que desejamos analisar. Não existe nenhuma recomendação muito específica para esse passo, mas precisamos que todos os missings sejam `NA` (não strings vazias). Isso já está implementado perfeitamente em `readr::read_csv` (ou `readr::read_delim` para arquivos separados por ponto-e-vírgula) e em `readxl::read_excel`.
 
-Para esse tutorial usaremos uma base criada artificialmente, então nem precisamos nos preocupar em lê-la. Ela possui 4 colunas numéricas e uma coluna de texto:
+Para esse tutorial usaremos a base `MASS::Cars93`, então nem precisamos nos preocupar em lê-la. Estas são algumas de suas colunas:
 
 ```{r, message = FALSE, echo = FALSE}
 X <- tibble::tibble(
@@ -50,75 +50,82 @@ X <- tibble::tibble(
 )
 ```
 
-```{r, echo = FALSE, results = 'asis'}
-knitr::kable(head(X))
+```{r, echo = FALSE}
+X <- MASS::Cars93
+knitr::kable(head(X[, 1:9]))
 ```
 
-Nesse momento nos certificaríamos de que todas as colunas estão do jeito que esperamos (colunas numéricas como `double`s, colunas de texto como `character`s, etc.); este passo não deve durar muito mais que 5 minutos. Se estivermos satisfeitos com a tabela que acabamos de ler, podemos seguir em frente com a análise.
+Nesse momento nos certificaríamos de que todas as colunas estão do jeito que esperamos (colunas numéricas como `numeric`s, colunas de texto como `character`s, colunas categóricas como `factor`s); este passo não deve durar muito mais que 5 minutos. Se estivermos satisfeitos com a tabela que acabamos de ler, podemos seguir em frente com a análise.
+
+```{r}
+# Transformar 'Model' em uma variável de texto
+X$Model <- as.character(X$Model)
+```
 
 ## Funções principais
 
 ### Examine
 
-Esta função precisa de apenas uma entrada: `X` (a tabela a ser examinada). A partir de `X`, `examine` retornará uma lista com duas tabelas contendo análises exploratórias, uma para as variáveis contínuas e uma para as variáveis categóricas.
+Esta função precisa de apenas uma entrada: `X` (a tabela a ser examinada). A partir de `X`, `examine` retornará uma lista com três tabelas contendo análises exploratórias, uma para as variáveis contínuas e uma para as variáveis categóricas.
 
-Se rodarmos o código a seguir, obteremos as análises exploratórias.
+Se rodarmos o código a seguir, obteremos as análises exploratórias em forma de tabelas comuns (aqui estou cortando os resultados, mas poderíamos usar `View` para visualizá-los por completo um a um).
 
 ```{r, message = FALSE}
-numericas <- doctr::report_num(doctr::examine(X))
-categoricas <- doctr::report_chr(doctr::examine(X))
+# Gerar análise exploratória
+exploratoria <- examine(X)
+
+# Obter resultados da análise para variáveis numéricas
+numericas <- report_num(exploratoria)
 ```
 
-Como ambas as tabelas são muito grandes para serem mostradas, fica aqui um resumo do que cada uma de suas colunas representa:
+```{r, echo = FALSE, results = 'asis'}
+knitr::kable(numericas[1:5, 1:15])
+```
 
-* `name`: nome da variável de `X` que cada linha representa
-* `min`, `max`: valores/comprimentos mínimo e máximo da variável
-* `1%`, ..., `99%`: percentis dos valores/comprimentos da variável
-* `mean`: média dos valores/comprimentos da variável
-* `sd`: desvio padrão dos valores/comprimentos da variável
-* `na`, `val`: número de missings e de não-missings da variável
-* `neg`, `zero`, `pos`: número de valores positivos, zeros e negativos da variável (só para numéricas)
-* `unq`: número de valores/strings únicos da varável
-* `mdp`: número máximo de casas decimais dos valores da variável (só para numéricas)
-* `asc`: igual a 1 se o texto da variável é como ASCII, ou seja, não tem acentos (só para categóricas)
-* `ltr`, `num`: porcentagem do texto da variável que são letras e números (só para categóricas)
+```{r, message = FALSE}
+# Obter resultados da análise para variáveis de texto
+textos <- report_chr(exploratoria)
+```
+
+```{r, echo = FALSE, results = 'asis'}
+knitr::kable(textos[, 1:18])
+```
+
+```{r, message = FALSE}
+# Obter resultados da análise para variáveis categóricas
+categoricas <- report_fct(exploratoria)
+```
+
+```{r, echo = FALSE, results = 'asis'}
+knitr::kable(head(categoricas))
+```
+
+Como todas as tabelas são muito grandes para serem mostradas, fica aqui um resumo do que cada uma de suas colunas representa:
+
+| coluna | numéricas | textos | categóricas | descriçao |
+|--|:--:|:--:|:--:|--|
+| `name` | x | x | x | nome da variável de `X` que cada linha representa |
+| `min`, `max` | x | x |  | valores/comprimentos mínimo e máximo da variável |
+| `1%`, ..., `99%` | x | x |  | percentis dos valores/comprimentos da variável |
+| `mean` | x | x |  | média dos valores/comprimentos da variável |
+| `sd` | x | x |  | desvio padrão dos valores/comprimentos da variável |
+| `na`, `val` | x | x |  | número de omissos e de não-omissos da variável |
+| `neg`, `zero`, `pos` | x |  |  | número de valores positivos, zeros e negativos da variável |
+| `unq` | x | x |  | número de valores/strings únicos da varável |
+| `mdp` | x |  |  | número máximo de casas decimais dos valores da variável |
+| `asc` |  | x |  | igual a 1 se o texto da variável é como ASCII, ou seja, não tem acentos |
+| `ltr`, `num` |  | x |  | porcentagem do texto da variável que são letras e números |
+| `data` |  |  | x | cada classe da variável |
+| `cnt`, `frq` |  |  | x | contagem e frequência de cada classe da variável |
 
 ### Diagnose
 
 A função `diagnose` recebe duas entradas: `X` (a tabela a ser diagnosticada) e `exams` (os exames a serem rodados em `X`).
 
-Os `exams` têm uma formatação bastante específica que precisa ser atendida. A seguir vou criar um exemplo diretamente de dentro do R, mas existe um template para isso na rede.
+Os `exams` têm uma formatação bastante específica que precisa ser atendida. Usando a função `guess_exams`, recebemos uma sugestão de exame pré-pronto para cada variável e espaço para customizarmos os parâmetros do mesmo.
 
-```{r, message = FALSE, echo = FALSE}
-exams <- tibble::tibble(
-  cols = c(
-    "dinheiro", "contagem", "quantidade", "continua", "categorica"
-  ),
-  funs = c(
-    "money", "count", "quantity", "continuous", "character"
-  ),
-  max_na = c(
-    "0.25", "", "", "0", "0"
-  ),
-  min_val = c(
-    "", "5", "", "", ""
-  ),
-  max_val = c(
-    "", "", "15", "", ""
-  ),
-  max_dec_places = c(
-    "", "", "", "3", ""
-  ),
-  min_unq = c(
-    "", "", "", "", "5"
-  ),
-  max_unq = c(
-    "", "", "", "", "2"
-  ),
-  least_frec_cls = c(
-    "", "", "", "", "0.5"
-  )
-)
+```{r, message = FALSE}
+exams <- guess_exams(X)
 ```
 
 ```{r, echo = FALSE, results = 'asis'}
@@ -136,24 +143,34 @@ A coluna `cols` indica o nome da coluna de `X` em que o exame será rodado. `fun
 
 As outras colunas de `exams` são parâmetros customizáveis para os tipos especificados anteriormente:
 
-* `max_na`: % máxima de NAs
-* `min_val`, `max_val`: valores mínimo e máximo (só para numéricas)
-* `max_dec_places`: número máximo de casas decimais (só para numéricas)
-* `min_unq`, `max_unq`: números mínimo e máximo de classes (só para categóricas)
-* `least_freq_cls`: % mínima do todo que uma classe pode representar (só para categóricas)
+| coluna | numéricas | textos | categóricas | descriçao |
+|--|:--:|:--:|:--:|--|
+| `max_na` | x | x | x | % máxima de NAs |
+| `min_val`, `max_val` | x |  |  | valores mínimo e máximo |
+| `max_dec_places` | x |  |  | percentis dos valores/comprimentos da variável |
+| `min_unq`, `max_unq` |  | x | x | números mínimo e máximo de classes |
+| `least_freq_cls` |  | x | x | % mínima do todo que uma classe pode representar |
+
+Neste momento podemos mudar manualmente os testes e os parâmetros. No nosso caso podemos apenas trocar a `funs` das variáveis de preço para `money` e limitar o máximo de NAs em `Luggage.room` para 0%
+
+```{r}
+# Editar alguns testes manualmente
+exams$funs[4:6] <- "money"
+exams$max_na[24] <- 0
+```
 
 Depois que pensarmos em quais exames cada variável tem que passar, a única coisa que precisamos fazer é rodar `diagnose`. Essa função executará os exames em `X` e nos retornará uma lista de resultados que pode ser consultada com `issues`:
 
 ```{r}
-resultados <- doctr::diagnose(X, exams)
-doctr::issues(resultados)
+resultados <- diagnose(X, exams)
+issues(resultados)
 ```
 
 Se quisermos consultar os problemas encontrados em colunas específicas, podemos usar `issues` com seu segundo argumento:
 
 ```{r}
-doctr::issues(resultados, 3)
-doctr::issues(resultados, "categorica")
+# doctr::issues(resultados, 3)
+# doctr::issues(resultados, "categorica")
 ```
 
 Com isso temos um resumo compreensivo de em quais testes cada variável não passou. Ussamos essa informação para tratar a base ou para mudar nossas preconcepções sobre ela.
@@ -165,9 +182,9 @@ A função `compare` seria o último passo no relatório de qualidade de dados e
 Para propósitos de demonstração, testarei `compare` em cenários artificiais: comparando `X` consigo mesma, `X` com `exams` e `X` com uma fatia de si mesma. Ela retorna uma lista de resultados que pode ser consultada com `issues` exatamente como em `diagnose` (o nome dos parâmetros problemáticos seguem o mesmo formato que as colunas das tabelas retornadas por `examine`).
 
 ```{r}
-doctr::issues(doctr::compare(X, X))
-doctr::issues(doctr::compare(X, exams))
-doctr::issues(doctr::compare(X, X[1:5, ]))
+# doctr::issues(doctr::compare(X, X))
+# doctr::issues(doctr::compare(X, exams))
+# doctr::issues(doctr::compare(X, X[1:5, ]))
 ```
 
 Note como `continua` é a fonte da maior parte dos problemas porque o elemento cortado com sua última linha pesava bastante na maioria das métricas avaliadas.

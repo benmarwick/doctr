@@ -62,7 +62,7 @@ X %>% diagnose(exams) %>% issues()
 #> No issues found in 'media_itens_cesta_loja'
 ```
 
-Finally we could compare multiple versions of a table over time with the help of `compare` and `issues()`
+Finally we could compare multiple versions of a table over time with the help of `compare` and `issues`
 
 ```r
 X_jan %>% compare(X_feb) %>% issues()
