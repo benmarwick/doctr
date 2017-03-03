@@ -17,7 +17,7 @@ guess_exams(X, verbose = FALSE)
 \arguments{
 \item{X}{Table to be examined}
 
-\item{verbose}{Specify the parsed column specifications}
+\item{verbose}{Whether to specify the parsed column specifications}
 }
 \description{
 Try to guess what exams a table's variables should go
