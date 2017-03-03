@@ -2,15 +2,15 @@
 % Please edit documentation in R/check.R
 \name{check_max_unq}
 \alias{check_max_unq}
-\title{Check if there aren't more than 'max_unq' classes in 'x$data'}
+\title{Check if there arent more than max_unq classes in x$data}
 \usage{
 check_max_unq(x, max_unq)
 }
 \arguments{
-\item{x}{list with data, result, and any errors already found}
+\item{x}{List with data, result, and any errors already found}
 
-\item{max_unq}{maximum number of distinct classes 'x$data' can have}
+\item{max_unq}{Maximum number of distinct classes x$data can have}
 }
 \description{
-Check if there aren't more than 'max_unq' classes in 'x$data'
+Check if there arent more than max_unq classes in x$data
 }

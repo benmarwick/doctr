@@ -2,15 +2,15 @@
 % Please edit documentation in R/check.R
 \name{check_mfc}
 \alias{check_mfc}
-\title{Check if no classe represents more than 'mfc' of 'x$data'}
+\title{Check if no classe represents more than mfc of x$data}
 \usage{
 check_mfc(x, mfc)
 }
 \arguments{
-\item{x}{list with data, result, and any errors already found}
+\item{x}{List with data, result, and any errors already found}
 
-\item{mfc}{maximum fraction of total for most frequent class}
+\item{mfc}{Maximum fraction of total for most frequent class}
 }
 \description{
-Check if no classe represents more than 'mfc' of 'x$data'
+Check if no classe represents more than mfc of x$data
 }

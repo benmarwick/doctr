@@ -7,7 +7,7 @@
 profile_num(x)
 }
 \arguments{
-\item{x}{list with data of a column}
+\item{x}{List with data of a column}
 }
 \description{
 Create profile for column of numerics

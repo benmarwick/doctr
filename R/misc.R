@@ -33,6 +33,7 @@ translate <- function(types) {
 #'   \code{vignette("doctr_diagnose")}
 #' 
 #' @param X Table to be examined
+#' @param verbose Specify the parsed column specifications
 #' 
 #' @export
 guess_exams <- function(X, verbose = FALSE) {

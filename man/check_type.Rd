@@ -2,15 +2,15 @@
 % Please edit documentation in R/check.R
 \name{check_type}
 \alias{check_type}
-\title{Check if 'x$data' is of type 'type'}
+\title{Check if x$data is of type type}
 \usage{
 check_type(x, type)
 }
 \arguments{
-\item{x}{list with data, result, and any errors already found}
+\item{x}{List with data, result, and any errors already found}
 
-\item{type}{'x$data' should have}
+\item{type}{x$data should have}
 }
 \description{
-Check if 'x$data' is of type 'type'
+Check if x$data is of type type
 }

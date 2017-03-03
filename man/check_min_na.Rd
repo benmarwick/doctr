@@ -2,17 +2,17 @@
 % Please edit documentation in R/check.R
 \name{check_min_na}
 \alias{check_min_na}
-\title{Check if fraction of 'x$data' that is NA is => 'min_na'}
+\title{Check if fraction of x$data that is NA is => min_na}
 \usage{
 check_min_na(x, min_na, rm_na = FALSE)
 }
 \arguments{
-\item{x}{list with data, result, and any errors already found}
+\item{x}{List with data, result, and any errors already found}
 
-\item{min_na}{minimum fraction of 'x$data' that can be NA}
+\item{min_na}{Minimum fraction of x$data that can be NA}
 
-\item{rm_na}{whether NAs should be removed once test is over}
+\item{rm_na}{Whether NAs should be removed once test is over}
 }
 \description{
-Check if fraction of 'x$data' that is NA is => 'min_na'
+Check if fraction of x$data that is NA is => min_na
 }
