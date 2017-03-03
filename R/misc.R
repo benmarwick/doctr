@@ -22,10 +22,12 @@ translate <- function(types) {
   return(new_funs)
 }
 
-#' Try to guess what exams a table's variables should go
+#' @title Guesses column types
+#'
+#' @description Tries to guess what exams a table's variables should go
 #'   through in \code{disgnose()}
 #'   
-#' This function samples 20% of X and tries to roughly identify
+#' @details This function samples 20\% of \code{X} and tries to roughly identify
 #'   what are its variables' types (money, count, etc.) and, once
 #'   this process is done, it creates a table with the chosen
 #'   exams given the identified types; you can learn more about
@@ -34,6 +36,16 @@ translate <- function(types) {
 #' 
 #' @param X Table to be examined
 #' @param verbose Whether to specify the parsed column specifications
+#' 
+#' @examples
+#' \dontrun{
+#'   library(tidyverse)
+#'   
+#'   # Running custom diagnostics on a table
+#'   exams <- guess_exams(txhousing)
+#'   exams$max_val[5] <- 2000000000
+#'   txhousing %>% diagnose(exams) %>% issues(verbose = TRUE)
+#' }
 #' 
 #' @export
 guess_exams <- function(X, verbose = FALSE) {

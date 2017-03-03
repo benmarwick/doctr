@@ -2,8 +2,7 @@
 % Please edit documentation in R/compare.R
 \name{compare}
 \alias{compare}
-\title{Compare the profiles of two tables, checking if
-  they can be considered similar enough}
+\title{Compares two tables}
 \usage{
 compare(X, Y, ci = 0.05)
 }
@@ -15,10 +14,26 @@ compare(X, Y, ci = 0.05)
 \item{ci}{The size of the confidence interval}
 }
 \description{
+Compares the profiles of two tables, checking if
+  they can be considered similar enough
+}
+\details{
 This funcion takes 100 random samples with replacement
   of table \code{X}, creating confidence intervals (of size
   \code{ci}) for its summary statistics; it then verifies
   what summary statistics of \code{Y} don't fall inside these
   confidence intervals and creates comprehensive reports about
   them (you can access these with \code{issues()})
+}
+\examples{
+\dontrun{
+  library(tidyverse)
+  
+  # Comparing a table to itself
+  txhousing \%>\% compare(txhousing) \%>\% issues()
+  
+  # Comparing two different tables
+  txhousing \%>\% compare(sample_n(txhousing, 20)) \%>\% issues(verbose = TRUE)
+}
+
 }

@@ -42,10 +42,12 @@ examine_ <- function(X) {
   return(list(numeric, character, categorical))
 }
 
-#' Create summary statistics for every column of X, varying
+#' @title EDA automator
+#'
+#' @description Creates summary statistics for every column of \code{X}, varying
 #'   summarization strategy depending on the type of variable
 #'   
-#' This function determines the types of the variables in
+#' @details This function determines the types of the variables in
 #'   \code{X} (numeric, text or factor) and creates a report
 #'   for each type of variable; these reports can be accessed
 #'   with \code{report_[num|chr|fct]()} and more information
@@ -53,6 +55,21 @@ examine_ <- function(X) {
 #' 
 #' @param X Table to be examined
 #' @param group A variable (name or index) to group X by before examining
+#' 
+#' @examples
+#' \dontrun{
+#'   library(tidyverse)
+#'   
+#'   # Creating automated EDA from table
+#'   eda <- txhousing %>% examine()
+#'   
+#'   # Fetching EDA for numeric variables
+#'   report_num(eda)
+#'   
+#'   # Creating and fetching automated EDA with grouping
+#'   eda <- txhousing %>% examine("city")
+#'   report_num(eda, "Austin")
+#' }
 #' 
 #' @export
 examine <- function(X, group = 0) {

@@ -2,15 +2,7 @@
 % Please edit documentation in R/misc.R
 \name{guess_exams}
 \alias{guess_exams}
-\title{Try to guess what exams a table's variables should go
-  through in \code{disgnose()}
-  
-This function samples 20% of X and tries to roughly identify
-  what are its variables' types (money, count, etc.) and, once
-  this process is done, it creates a table with the chosen
-  exams given the identified types; you can learn more about
-  the output of this function and how to customize it at
-  \code{vignette("doctr_diagnose")}}
+\title{Guesses column types}
 \usage{
 guess_exams(X, verbose = FALSE)
 }
@@ -20,13 +12,25 @@ guess_exams(X, verbose = FALSE)
 \item{verbose}{Whether to specify the parsed column specifications}
 }
 \description{
-Try to guess what exams a table's variables should go
+Tries to guess what exams a table's variables should go
   through in \code{disgnose()}
-  
-This function samples 20% of X and tries to roughly identify
+}
+\details{
+This function samples 20\% of \code{X} and tries to roughly identify
   what are its variables' types (money, count, etc.) and, once
   this process is done, it creates a table with the chosen
   exams given the identified types; you can learn more about
   the output of this function and how to customize it at
   \code{vignette("doctr_diagnose")}
+}
+\examples{
+\dontrun{
+  library(tidyverse)
+  
+  # Running custom diagnostics on a table
+  exams <- guess_exams(txhousing)
+  exams$max_val[5] <- 2000000000
+  txhousing \%>\% diagnose(exams) \%>\% issues(verbose = TRUE)
+}
+
 }

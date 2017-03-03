@@ -1,7 +1,9 @@
-#' Compare the profiles of two tables, checking if
+#' @title Compares two tables
+#' 
+#' @description Compares the profiles of two tables, checking if
 #'   they can be considered similar enough
 #' 
-#' This funcion takes 100 random samples with replacement
+#' @details This funcion takes 100 random samples with replacement
 #'   of table \code{X}, creating confidence intervals (of size
 #'   \code{ci}) for its summary statistics; it then verifies
 #'   what summary statistics of \code{Y} don't fall inside these
@@ -11,6 +13,17 @@
 #' @param X Table used as standard for comparison
 #' @param Y Table to be evaluated
 #' @param ci The size of the confidence interval
+#' 
+#' @examples
+#' \dontrun{
+#'   library(tidyverse)
+#'   
+#'   # Comparing a table to itself
+#'   txhousing %>% compare(txhousing) %>% issues()
+#'   
+#'   # Comparing two different tables
+#'   txhousing %>% compare(sample_n(txhousing, 20)) %>% issues(verbose = TRUE)
+#' }
 #' 
 #' @export
 compare <- function(X, Y, ci = 0.05) {

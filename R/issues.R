@@ -18,10 +18,12 @@ issues_ <- function(x, name, verbose) {
   return(msg)
 }
 
-#' Print messages with issues found in X (or in one of its columns)
+#' @title Prints issues found in other functions
+#'
+#' @description Prints messages with issues found in \code{X} (or one of its columns)
 #'   after running either \code{diagnose(X)} or \code{compare(X)}
 #'   
-#' This function interprets the results from \code{diagnose()} and
+#' @details This function interprets the results from \code{diagnose()} and
 #'   \code{compare()}, and generates a comprehensive report printed as
 #'   messages to the console; for more information about what gets printed
 #'   consult \code{vignette("doctr_diagnose")} or \code{vignette("doctr_examine")}
@@ -29,6 +31,21 @@ issues_ <- function(x, name, verbose) {
 #' @param res A list returned from \code{diagnose()} or \code{compare()}
 #' @param i Index or name of column from which to print issues
 #' @param verbose Specify what issues were found in each column
+#' 
+#' @examples
+#' \dontrun{
+#'   library(tidyverse)
+#'   
+#'   # Getting issues from diagnostic
+#'   txhousing %>% diagnose() %>% issues()
+#'   
+#'   # Getting issues from comparison
+#'   txhousing %>% compare(txhousing) %>% issues()
+#'   
+#'   # Getting issues from specific variable
+#'   txhousing %>% diagnose() %>% issues("inventory", verbose = TRUE)
+#'   txhousing %>% compare(sample_n(txhousing, 20)) %>% issues(1, verbose = TRUE)
+#' }
 #' 
 #' @export
 issues <- function(res, i = 0, verbose = FALSE) {

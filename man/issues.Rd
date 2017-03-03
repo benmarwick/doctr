@@ -2,13 +2,7 @@
 % Please edit documentation in R/issues.R
 \name{issues}
 \alias{issues}
-\title{Print messages with issues found in X (or in one of its columns)
-  after running either \code{diagnose(X)} or \code{compare(X)}
-  
-This function interprets the results from \code{diagnose()} and
-  \code{compare()}, and generates a comprehensive report printed as
-  messages to the console; for more information about what gets printed
-  consult \code{vignette("doctr_diagnose")} or \code{vignette("doctr_examine")}}
+\title{Prints issues found in other functions}
 \usage{
 issues(res, i = 0, verbose = FALSE)
 }
@@ -20,11 +14,28 @@ issues(res, i = 0, verbose = FALSE)
 \item{verbose}{Specify what issues were found in each column}
 }
 \description{
-Print messages with issues found in X (or in one of its columns)
+Prints messages with issues found in \code{X} (or one of its columns)
   after running either \code{diagnose(X)} or \code{compare(X)}
-  
+}
+\details{
 This function interprets the results from \code{diagnose()} and
   \code{compare()}, and generates a comprehensive report printed as
   messages to the console; for more information about what gets printed
   consult \code{vignette("doctr_diagnose")} or \code{vignette("doctr_examine")}
+}
+\examples{
+\dontrun{
+  library(tidyverse)
+  
+  # Getting issues from diagnostic
+  txhousing \%>\% diagnose() \%>\% issues()
+  
+  # Getting issues from comparison
+  txhousing \%>\% compare(txhousing) \%>\% issues()
+  
+  # Getting issues from specific variable
+  txhousing \%>\% diagnose() \%>\% issues("inventory", verbose = TRUE)
+  txhousing \%>\% compare(sample_n(txhousing, 20)) \%>\% issues(1, verbose = TRUE)
+}
+
 }
