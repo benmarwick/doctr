@@ -2,15 +2,30 @@
 % Please edit documentation in R/diagnose.R
 \name{diagnose}
 \alias{diagnose}
-\title{Run tests on a table to check if it fits it's expected form}
+\title{Run tests on a table to check its variables pass
+  certain standards and fit certain assumptions
+  specified via \code{exams}
+  
+This function receives a table and a battery of exams
+  that its variables should pass; if a variable doesn't
+  pass any of these tests, comprehensive reports are
+  created (you can access them with \code{issues()})}
 \usage{
 diagnose(X, exams = guess_exams(X))
 }
 \arguments{
-\item{X}{table to run tests on}
+\item{X}{Table to run tests on}
 
-\item{exams}{tests to be run on 'X'}
+\item{exams}{Tests to be run on X (see \code{vignette
+("doctr_diagnose")} for more information)}
 }
 \description{
-Run tests on a table to check if it fits it's expected form
+Run tests on a table to check its variables pass
+  certain standards and fit certain assumptions
+  specified via \code{exams}
+  
+This function receives a table and a battery of exams
+  that its variables should pass; if a variable doesn't
+  pass any of these tests, comprehensive reports are
+  created (you can access them with \code{issues()})
 }

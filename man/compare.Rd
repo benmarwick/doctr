@@ -2,17 +2,23 @@
 % Please edit documentation in R/compare.R
 \name{compare}
 \alias{compare}
-\title{Compare the profiles of two tables}
+\title{Compare the profiles of two tables, checking if
+  they can be considered similar enough}
 \usage{
 compare(X, Y, ci = 0.05)
 }
 \arguments{
-\item{X}{table used as standard for comparison}
+\item{X}{Table used as standard for comparison}
 
-\item{Y}{table to be evaluated}
+\item{Y}{Table to be evaluated}
 
-\item{ci}{percentage to be used for the CI}
+\item{ci}{The size of the confidence interval}
 }
 \description{
-Compare the profiles of two tables
+This funcion takes 100 random samples with replacement
+  of table \code{X}, creating confidence intervals (of size
+  \code{ci}) for its summary statistics; it then verifies
+  what summary statistics of \code{Y} don't fall inside these
+  confidence intervals and creates comprehensive reports about
+  them (you can access these with \code{issues()})
 }

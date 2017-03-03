@@ -2,15 +2,31 @@
 % Please edit documentation in R/report.R
 \name{report_fct}
 \alias{report_fct}
-\title{Return summary of columns of categoricals in a table}
+\title{Return table with summary statistics of X's factor
+  variables (based on results from \code{examine(X)})
+  
+This function uses the result of \code{examine()}'s
+  execution to generate a report on a table's factor
+  variables; it is also able to retrieve the results
+  from only one group given that \code{examine()}
+  was used with its \code{group} argument}
 \usage{
-report_fct(X, group = "")
+report_fct(res, group = "")
 }
 \arguments{
-\item{X}{list created by 'examine'}
+\item{res}{A list returned from \code{examine()}}
 
-\item{group}{group from which to retrieve summary}
+\item{group}{Group from which to retrieve summary
+(see \code{vignette("doctr_examine")} for more
+information)}
 }
 \description{
-Return summary of columns of categoricals in a table
+Return table with summary statistics of X's factor
+  variables (based on results from \code{examine(X)})
+  
+This function uses the result of \code{examine()}'s
+  execution to generate a report on a table's factor
+  variables; it is also able to retrieve the results
+  from only one group given that \code{examine()}
+  was used with its \code{group} argument
 }

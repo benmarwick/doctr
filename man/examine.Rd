@@ -2,15 +2,29 @@
 % Please edit documentation in R/examine.R
 \name{examine}
 \alias{examine}
-\title{Create summary statistics for every column in 'X'}
+\title{Create summary statistics for every column of X, varying
+  summarization strategy depending on the type of variable
+  
+This function determines the types of the variables in
+  \code{X} (numeric, text or factor) and creates a report
+  for each type of variable; these reports can be accessed
+  with \code{report_[num|chr|fct]()} and more information
+  about these are available at \code{vignette("doctr_examine")}}
 \usage{
 examine(X, group = 0)
 }
 \arguments{
-\item{X}{table to be examined}
+\item{X}{Table to be examined}
 
-\item{group}{variable to group X by before examining}
+\item{group}{A variable (name or index) to group X by before examining}
 }
 \description{
-Create summary statistics for every column in 'X'
+Create summary statistics for every column of X, varying
+  summarization strategy depending on the type of variable
+  
+This function determines the types of the variables in
+  \code{X} (numeric, text or factor) and creates a report
+  for each type of variable; these reports can be accessed
+  with \code{report_[num|chr|fct]()} and more information
+  about these are available at \code{vignette("doctr_examine")}
 }

@@ -2,17 +2,29 @@
 % Please edit documentation in R/issues.R
 \name{issues}
 \alias{issues}
-\title{Print messages with issues found in 'X' (or in one of its columns)}
+\title{Print messages with issues found in X (or in one of its columns)
+  after running either \code{diagnose(X)} or \code{compare(X)}
+  
+This function interprets the results from \code{diagnose()} and
+  \code{compare()}, and generates a comprehensive report printed as
+  messages to the console; for more information about what gets printed
+  consult \code{vignette("doctr_diagnose")} or \code{vignette("doctr_examine")}}
 \usage{
-issues(X, i = 0, verbose = TRUE)
+issues(res, i = 0, verbose = FALSE)
 }
 \arguments{
-\item{X}{list of lists with data, result, and any errors already found for each column}
+\item{res}{A list returned from \code{diagnose()} or \code{compare()}}
 
-\item{i}{index of column from which to print issues}
+\item{i}{Index or name of column from which to print issues}
 
-\item{verbose}{specify the issues found in each column}
+\item{verbose}{Specify what issues were found in each column}
 }
 \description{
-Print messages with issues found in 'X' (or in one of its columns)
+Print messages with issues found in X (or in one of its columns)
+  after running either \code{diagnose(X)} or \code{compare(X)}
+  
+This function interprets the results from \code{diagnose()} and
+  \code{compare()}, and generates a comprehensive report printed as
+  messages to the console; for more information about what gets printed
+  consult \code{vignette("doctr_diagnose")} or \code{vignette("doctr_examine")}
 }

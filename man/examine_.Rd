@@ -2,7 +2,7 @@
 % Please edit documentation in R/examine.R
 \name{examine_}
 \alias{examine_}
-\title{Create summary statistics for every column in 'X' (no grouping)}
+\title{Create summary statistics for every column in X (no grouping)}
 \usage{
 examine_(X)
 }
@@ -10,5 +10,5 @@ examine_(X)
 \item{X}{table to be examined}
 }
 \description{
-Create summary statistics for every column in 'X' (no grouping)
+Create summary statistics for every column in X (no grouping)
 }

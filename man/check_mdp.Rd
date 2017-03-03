@@ -2,15 +2,15 @@
 % Please edit documentation in R/check.R
 \name{check_mdp}
 \alias{check_mdp}
-\title{Check if no entry of 'x$data' has more decimal places than 'mdp'}
+\title{Check if no entry of x$data has more decimal places than mdp}
 \usage{
 check_mdp(x, mdp)
 }
 \arguments{
-\item{x}{list with data, result, and any errors already found}
+\item{x}{List with data, result, and any errors already found}
 
-\item{mdp}{maximum number of decimal places an entry in 'x$data' can have}
+\item{mdp}{Maximum number of decimal places an entry in x$data can have}
 }
 \description{
-Check if no entry of 'x$data' has more decimal places than 'mdp'
+Check if no entry of x$data has more decimal places than mdp
 }

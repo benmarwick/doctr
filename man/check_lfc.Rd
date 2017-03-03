@@ -2,15 +2,15 @@
 % Please edit documentation in R/check.R
 \name{check_lfc}
 \alias{check_lfc}
-\title{Check if all classes represent at least 'lfc' of 'x$data'}
+\title{Check if all classes represent at least lfc of x$data}
 \usage{
 check_lfc(x, lfc)
 }
 \arguments{
-\item{x}{list with data, result, and any errors already found}
+\item{x}{List with data, result, and any errors already found}
 
-\item{lfc}{minimum fraction of total for least frequent class}
+\item{lfc}{Minimum fraction of total for least frequent class}
 }
 \description{
-Check if all classes represent at least 'lfc' of 'x$data'
+Check if all classes represent at least lfc of x$data
 }

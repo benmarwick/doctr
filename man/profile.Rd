@@ -7,7 +7,7 @@
 profile(X)
 }
 \arguments{
-\item{X}{table to be profiled}
+\item{X}{Table to be profiled}
 }
 \description{
 Create profile of every column in X

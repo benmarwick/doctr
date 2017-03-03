@@ -2,13 +2,31 @@
 % Please edit documentation in R/misc.R
 \name{guess_exams}
 \alias{guess_exams}
-\title{Try to guess which exam a dataset should go through}
+\title{Try to guess what exams a table's variables should go
+  through in \code{disgnose()}
+  
+This function samples 20% of X and tries to roughly identify
+  what are its variables' types (money, count, etc.) and, once
+  this process is done, it creates a table with the chosen
+  exams given the identified types; you can learn more about
+  the output of this function and how to customize it at
+  \code{vignette("doctr_diagnose")}}
 \usage{
-guess_exams(X)
+guess_exams(X, verbose = FALSE)
 }
 \arguments{
-\item{X}{table to be examined}
+\item{X}{Table to be examined}
+
+\item{verbose}{Specify the parsed column specifications}
 }
 \description{
-Try to guess which exam a dataset should go through
+Try to guess what exams a table's variables should go
+  through in \code{disgnose()}
+  
+This function samples 20% of X and tries to roughly identify
+  what are its variables' types (money, count, etc.) and, once
+  this process is done, it creates a table with the chosen
+  exams given the identified types; you can learn more about
+  the output of this function and how to customize it at
+  \code{vignette("doctr_diagnose")}
 }

@@ -2,15 +2,15 @@
 % Please edit documentation in R/check.R
 \name{check_min_unq}
 \alias{check_min_unq}
-\title{Check if there aren't less than 'min_unq' classes in 'x$data'}
+\title{Check if there arent less than min_unq classes in x$data}
 \usage{
 check_min_unq(x, min_unq)
 }
 \arguments{
-\item{x}{list with data, result, and any errors already found}
+\item{x}{List with data, result, and any errors already found}
 
-\item{min_unq}{minimum number of distinct classes 'x$data' can have}
+\item{min_unq}{Minimum number of distinct classes x$data can have}
 }
 \description{
-Check if there aren't less than 'min_unq' classes in 'x$data'
+Check if there arent less than min_unq classes in x$data
 }

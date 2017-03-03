@@ -7,7 +7,7 @@
 profile_tbl(X)
 }
 \arguments{
-\item{X}{table in list form}
+\item{X}{Table in list form}
 }
 \description{
 Create profile for table

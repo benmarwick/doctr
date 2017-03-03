@@ -2,15 +2,15 @@
 % Please edit documentation in R/check.R
 \name{check_len}
 \alias{check_len}
-\title{Check if 'x$data' has length > 'len'}
+\title{Check if x$data has length > len}
 \usage{
 check_len(x, len)
 }
 \arguments{
-\item{x}{list with data, result, and any errors already found}
+\item{x}{List with data, result, and any errors already found}
 
-\item{len}{minimum length 'x$data' can have}
+\item{len}{Minimum length x$data can have}
 }
 \description{
-Check if 'x$data' has length > 'len'
+Check if x$data has length > len
 }

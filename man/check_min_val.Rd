@@ -2,15 +2,15 @@
 % Please edit documentation in R/check.R
 \name{check_min_val}
 \alias{check_min_val}
-\title{Check if no entry of 'x$data' is smaller than 'min_val'}
+\title{Check if no entry of x$data is smaller than min_val}
 \usage{
 check_min_val(x, min_val)
 }
 \arguments{
-\item{x}{list with data, result, and any errors already found}
+\item{x}{List with data, result, and any errors already found}
 
-\item{min_val}{maximum value an entry in 'x$data' can have}
+\item{min_val}{Maximum value an entry in x$data can have}
 }
 \description{
-Check if no entry of 'x$data' is smaller than 'min_val'
+Check if no entry of x$data is smaller than min_val
 }

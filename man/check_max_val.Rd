@@ -2,15 +2,15 @@
 % Please edit documentation in R/check.R
 \name{check_max_val}
 \alias{check_max_val}
-\title{Check if no entry of 'x$data' is larger than 'max_val'}
+\title{Check if no entry of x$data is larger than max_val}
 \usage{
 check_max_val(x, max_val)
 }
 \arguments{
-\item{x}{list with data, result, and any errors already found}
+\item{x}{List with data, result, and any errors already found}
 
-\item{max_val}{maximum value an entry in 'x$data' can have}
+\item{max_val}{Maximum value an entry in x$data can have}
 }
 \description{
-Check if no entry of 'x$data' is larger than 'max_val'
+Check if no entry of x$data is larger than max_val
 }
