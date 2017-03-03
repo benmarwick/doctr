@@ -1,7 +1,15 @@
-#' Run tests on a table to check if it fits it's expected form
+#' Run tests on a table to check its variables pass
+#'   certain standards and fit certain assumptions
+#'   specified via \code{exams}
+#'   
+#' This function receives a table and a battery of exams
+#'   that its variables should pass; if a variable doesn't
+#'   pass any of these tests, comprehensive reports are
+#'   created (you can access them with \code{issues()})
 #' 
-#' @param X table to run tests on
-#' @param exams tests to be run on 'X'
+#' @param X Table to run tests on
+#' @param exams Tests to be run on X (see \code{vignette
+#'   ("doctr_diagnose")} for more information)
 #' 
 #' @export
 diagnose <- function(X, exams = guess_exams(X)) {

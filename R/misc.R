@@ -22,12 +22,20 @@ translate <- function(types) {
   return(new_funs)
 }
 
-#' Try to guess which exam a dataset should go through
+#' Try to guess what exams a table's variables should go
+#'   through in \code{disgnose()}
+#'   
+#' This function samples 20% of X and tries to roughly identify
+#'   what are its variables' types (money, count, etc.) and, once
+#'   this process is done, it creates a table with the chosen
+#'   exams given the identified types; you can learn more about
+#'   the output of this function and how to customize it at
+#'   \code{vignette("doctr_diagnose")}
 #' 
-#' @param X table to be examined
+#' @param X Table to be examined
 #' 
 #' @export
-guess_exams <- function(X) {
+guess_exams <- function(X, verbose = FALSE) {
   cols <- names(X)
   s_size <- round(0.2*nrow(X), 0)
   
@@ -75,12 +83,14 @@ guess_exams <- function(X) {
     min_unq = "", max_unq = "", least_frec_cls = ""
   )
   
-  msg <- "Parsed with column specification:\ncols(\n"
-  for (i in 1:length(cols)) {
-    msg <- stringr::str_c(msg, "    ", cols[i], " = ", funs[i], "\n")
+  if (verbose) {
+    msg <- "Parsed with column specification:\ncols(\n"
+    for (i in 1:length(cols)) {
+      msg <- stringr::str_c(msg, "    ", cols[i], " = ", funs[i], "\n")
+    }
+    msg <- stringr::str_c(msg, ")")
+    message(msg)
   }
-  msg <- stringr::str_c(msg, ")")
-  message(msg)
   
   return(tibble::as_tibble(exams))
 }

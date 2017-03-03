@@ -1,8 +1,16 @@
-#' Compare the profiles of two tables
+#' Compare the profiles of two tables, checking if
+#'   they can be considered similar enough
 #' 
-#' @param X table used as standard for comparison
-#' @param Y table to be evaluated
-#' @param ci percentage to be used for the CI
+#' This funcion takes 100 random samples with replacement
+#'   of table \code{X}, creating confidence intervals (of size
+#'   \code{ci}) for its summary statistics; it then verifies
+#'   what summary statistics of \code{Y} don't fall inside these
+#'   confidence intervals and creates comprehensive reports about
+#'   them (you can access these with \code{issues()})
+#' 
+#' @param X Table used as standard for comparison
+#' @param Y Table to be evaluated
+#' @param ci The size of the confidence interval
 #' 
 #' @export
 compare <- function(X, Y, ci = 0.05) {

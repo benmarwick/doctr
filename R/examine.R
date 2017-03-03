@@ -1,4 +1,4 @@
-#' Create summary statistics for every column in 'X' (no grouping)
+#' Create summary statistics for every column in X (no grouping)
 #' 
 #' @param X table to be examined
 examine_ <- function(X) {
@@ -42,10 +42,17 @@ examine_ <- function(X) {
   return(list(numeric, character, categorical))
 }
 
-#' Create summary statistics for every column in 'X'
+#' Create summary statistics for every column of X, varying
+#'   summarization strategy depending on the type of variable
+#'   
+#' This function determines the types of the variables in
+#'   \code{X} (numeric, text or factor) and creates a report
+#'   for each type of variable; these reports can be accessed
+#'   with \code{report_[num|chr|fct]()} and more information
+#'   about these are available at \code{vignette("doctr_examine")}
 #' 
-#' @param X table to be examined
-#' @param group variable to group X by before examining
+#' @param X Table to be examined
+#' @param group A variable (name or index) to group X by before examining
 #' 
 #' @export
 examine <- function(X, group = 0) {

@@ -1,10 +1,10 @@
-#' Check if 'x$data' is a character variable
+#' Check if x$data is a character variable
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param min_unq minimum number of unique classes 'x$data' can have
-#' @param max_unq maximum number of unique classes 'x$data' can have
-#' @param max_na fraction of 'x$data' that can be NA
-#' @param least_frec_cls minimum fraction of total represented by least frequent class
+#' @param x List with data, result, and any errors already found
+#' @param min_unq Minimum number of unique classes x$data can have
+#' @param max_unq Maximum number of unique classes x$data can have
+#' @param max_na Fraction of x$data that can be NA
+#' @param least_frec_cls Minimum fraction of total represented by least frequent class
 #' 
 #' @rdname is_character
 is_character <- function(x, min_unq = 0, max_unq = Inf, max_na = 0.9, least_frec_cls = 0) {
@@ -24,13 +24,13 @@ is_character <- function(x, min_unq = 0, max_unq = Inf, max_na = 0.9, least_frec
   return(x)
 }
 
-#' Check if 'x$data' is a continuous variable
+#' Check if x$data is a continuous variable
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param min_val minimum value 'x$data' can have
-#' @param max_val maximum value 'x$data' can have
-#' @param max_na fraction of 'x$data' that can be NA
-#' @param max_dec_places maximum number of decimal places in values of 'x$data'
+#' @param x List with data, result, and any errors already found
+#' @param min_val Minimum value x$data can have
+#' @param max_val Maximum value x$data can have
+#' @param max_na Fraction of x$data that can be NA
+#' @param max_dec_places Maximum number of decimal places in values of x$data
 #' 
 #' @rdname is_continuous
 is_continuous <- function(x, min_val = -Inf, max_val = Inf, max_na = 0.9, max_dec_places = Inf) {
@@ -50,41 +50,41 @@ is_continuous <- function(x, min_val = -Inf, max_val = Inf, max_na = 0.9, max_de
   return(x)
 }
 
-#' Check if 'x$data' is a quantity variable
+#' Check if x$data is a quantity variable
 #'
 #' @rdname is_continuous
 is_quantity <- function(x, min_val = 0, max_val = Inf, max_na = 0.9, max_dec_places = Inf) {
   is_continuous(x, min_val, max_val, max_na, max_dec_places)
 }
 
-#' Check if 'x$data' is a count variable
+#' Check if x$data is a count variable
 #'
 #' @rdname is_continuous
 is_count <- function(x, min_val = 0, max_val = Inf, max_na = 0.9, max_dec_places = 0) {
   is_continuous(x, min_val, max_val, max_na, max_dec_places)
 }
 
-#' Check if 'x$data' is a money variable
+#' Check if x$data is a money variable
 #'
 #' @rdname is_continuous
 is_money <- function(x, min_val = 0, max_val = Inf, max_na = 0.9, max_dec_places = 2) {
   is_continuous(x, min_val, max_val, max_na, max_dec_places)
 }
 
-#' Check if 'x$data' is a percentage variable
+#' Check if x$data is a percentage variable
 #'
 #' @rdname is_continuous
 is_percentage <- function(x, min_val = 0, max_val = 1, max_na = 0.9, max_dec_places = Inf) {
   is_continuous(x, min_val, max_val, max_na, max_dec_places)
 }
 
-#' Check if 'x$data' is a categorical variable
+#' Check if x$data is a categorical variable
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param min_unq minimum number of unique classes 'x$data' can have
-#' @param max_unq maximum number of unique classes 'x$data' can have
-#' @param max_na fraction of 'x$data' that can be NA
-#' @param least_frec_cls minimum fraction of total represented by least frequent class
+#' @param x List with data, result, and any errors already found
+#' @param min_unq Minimum number of unique classes x$data can have
+#' @param max_unq Maximum number of unique classes x$data can have
+#' @param max_na Fraction of x$data that can be NA
+#' @param least_frec_cls Minimum fraction of total represented by least frequent class
 #' 
 #' @rdname is_categorical
 is_categorical <- function(x, min_unq = 0, max_unq = Inf, max_na = 0.9, least_frec_cls = 0) {

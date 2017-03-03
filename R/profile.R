@@ -1,6 +1,6 @@
 #' Create profile for table
 #' 
-#' @param X table in list form
+#' @param X Table in list form
 profile_tbl <- function(X) {
   meta <- list()
   meta$ncol <- length(X)
@@ -15,7 +15,7 @@ profile_tbl <- function(X) {
 
 #' Create profile for column of numerics
 #' 
-#' @param x list with data of a column
+#' @param x List with data of a column
 profile_num <- function(x) {
   x$len <- length(x$data)
   
@@ -47,7 +47,7 @@ profile_num <- function(x) {
 
 #' Create profile for column of characters
 #' 
-#' @param x list with data of a column
+#' @param x List with data of a column
 profile_chr <- function(x) {
   x$len <- length(x$data)
   
@@ -80,7 +80,7 @@ profile_chr <- function(x) {
 
 #' Create profile for column of characters
 #' 
-#' @param x list with data of a column
+#' @param x List with data of a column
 profile_fct <- function(x) {
   x$unq <- length(unique(x$data))
   
@@ -101,7 +101,7 @@ profile_fct <- function(x) {
 
 #' Create profile of every column in X
 #' 
-#' @param X table to be profiled
+#' @param X Table to be profiled
 profile <- function(X) {
   
   X <- X %>%

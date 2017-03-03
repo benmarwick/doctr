@@ -1,7 +1,7 @@
-#' Check if 'x$data' has length > 'len'
+#' Check if x$data has length > len
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param len minimum length 'x$data' can have
+#' @param x List with data, result, and any errors already found
+#' @param len Minimum length x$data can have
 check_len <- function(x, len) {
   if (length(x$data) < len) {
     x$len <- "Data has length 0"
@@ -11,10 +11,10 @@ check_len <- function(x, len) {
   return(x)
 }
 
-#' Check if 'x$data' is of type 'type'
+#' Check if x$data is of type type
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param type 'x$data' should have
+#' @param x List with data, result, and any errors already found
+#' @param type x$data should have
 check_type <- function(x, type) {
   if (stringr::str_detect(class(x$data), type)) {
     x$type <- paste0("Data isn't of type ", type)
@@ -24,11 +24,11 @@ check_type <- function(x, type) {
   return(x)
 }
 
-#' Check if fraction of 'x$data' that is NA is => 'min_na'
+#' Check if fraction of x$data that is NA is => min_na
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param min_na minimum fraction of 'x$data' that can be NA
-#' @param rm_na whether NAs should be removed once test is over
+#' @param x List with data, result, and any errors already found
+#' @param min_na Minimum fraction of x$data that can be NA
+#' @param rm_na Whether NAs should be removed once test is over
 check_min_na <- function(x, min_na, rm_na = FALSE) {
   if (sum(is.na(x$data))/length(x$data) < min_na) {
     x$min_na <- paste0("Less than ", min_na*100, "% of entries are NAs")
@@ -42,11 +42,11 @@ check_min_na <- function(x, min_na, rm_na = FALSE) {
   return(x)
 }
 
-#' Check if fraction of 'x$data' that is NA is <= 'max_na'
+#' Check if fraction of x$data that is NA is <= max_na
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param max_na maximum fraction of 'x$data' that can be NA
-#' @param rm_na whether NAs should be removed once test is over
+#' @param x List with data, result, and any errors already found
+#' @param max_na Maximum fraction of x$data that can be NA
+#' @param rm_na Whether NAs should be removed once test is over
 check_max_na <- function(x, max_na, rm_na = FALSE) {
   if (sum(is.na(x$data))/length(x$data) > max_na) {
     x$max_na <- paste0("More than ", max_na*100, "% of entries are NAs")
@@ -60,10 +60,10 @@ check_max_na <- function(x, max_na, rm_na = FALSE) {
   return(x)
 }
 
-#' Check if no entry of 'x$data' has more decimal places than 'mdp'
+#' Check if no entry of x$data has more decimal places than mdp
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param mdp maximum number of decimal places an entry in 'x$data' can have
+#' @param x List with data, result, and any errors already found
+#' @param mdp Maximum number of decimal places an entry in x$data can have
 check_mdp <- function(x, mdp) {
   dp <- stringr::str_length(stringr::str_extract(as.character(x$data), "\\.[0-9]*")) - 1
   dp[is.na(dp)] <- 0
@@ -76,10 +76,10 @@ check_mdp <- function(x, mdp) {
   return(x)
 }
 
-#' Check if no entry of 'x$data' is larger than 'max_val'
+#' Check if no entry of x$data is larger than max_val
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param max_val maximum value an entry in 'x$data' can have
+#' @param x List with data, result, and any errors already found
+#' @param max_val Maximum value an entry in x$data can have
 check_max_val <- function(x, max_val) {
   if (sum(x$data > max_val) > 0) {
     x$max_val <- paste0(sum(x$data > max_val), " entries are larger than ", max_val)
@@ -89,10 +89,10 @@ check_max_val <- function(x, max_val) {
   return(x)
 }
 
-#' Check if no entry of 'x$data' is smaller than 'min_val'
+#' Check if no entry of x$data is smaller than min_val
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param min_val maximum value an entry in 'x$data' can have
+#' @param x List with data, result, and any errors already found
+#' @param min_val Maximum value an entry in x$data can have
 check_min_val <- function(x, min_val) {
   if (sum(x$data < min_val) > 0) {
     x$min_val <- paste0(sum(x$data < min_val), " entries are smaller than ", min_val)
@@ -102,10 +102,10 @@ check_min_val <- function(x, min_val) {
   return(x)
 }
 
-#' Check if there aren't less than 'min_unq' classes in 'x$data'
+#' Check if there arent less than min_unq classes in x$data
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param min_unq minimum number of distinct classes 'x$data' can have
+#' @param x List with data, result, and any errors already found
+#' @param min_unq Minimum number of distinct classes x$data can have
 check_min_unq <- function(x, min_unq) {
   unq <- unique(x$data)
   
@@ -117,10 +117,10 @@ check_min_unq <- function(x, min_unq) {
   return(x)
 }
 
-#' Check if there aren't more than 'max_unq' classes in 'x$data'
+#' Check if there arent more than max_unq classes in x$data
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param max_unq maximum number of distinct classes 'x$data' can have
+#' @param x List with data, result, and any errors already found
+#' @param max_unq Maximum number of distinct classes x$data can have
 check_max_unq <- function(x, max_unq) {
   unq <- unique(x$data)
   
@@ -132,10 +132,10 @@ check_max_unq <- function(x, max_unq) {
   return(x)
 }
 
-#' Check if all classes represent at least 'lfc' of 'x$data'
+#' Check if all classes represent at least lfc of x$data
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param lfc minimum fraction of total for least frequent class
+#' @param x List with data, result, and any errors already found
+#' @param lfc Minimum fraction of total for least frequent class
 check_lfc <- function(x, lfc) {
   lf <- lfc*length(x$data)
   c <- table(x$data)[table(x$data) < lf]
@@ -149,10 +149,10 @@ check_lfc <- function(x, lfc) {
   return(x)
 }
 
-#' Check if no classe represents more than 'mfc' of 'x$data'
+#' Check if no classe represents more than mfc of x$data
 #' 
-#' @param x list with data, result, and any errors already found
-#' @param mfc maximum fraction of total for most frequent class
+#' @param x List with data, result, and any errors already found
+#' @param mfc Maximum fraction of total for most frequent class
 check_mfc <- function(x, mfc) {
   mf <- mfc*length(x$data)
   c <- table(x$data)[table(x$data) > mf]
