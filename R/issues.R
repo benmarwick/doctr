@@ -34,17 +34,17 @@ issues_ <- function(x, name, verbose) {
 #' 
 #' @examples
 #' \dontrun{
-#'   library(tidyverse)
+#' library(tidyverse)
 #'   
-#'   # Getting issues from diagnostic
-#'   txhousing %>% diagnose() %>% issues()
+#' # Getting issues from diagnostic
+#' txhousing %>% diagnose() %>% issues()
 #'   
-#'   # Getting issues from comparison
-#'   txhousing %>% compare(txhousing) %>% issues()
+#' # Getting issues from comparison
+#' txhousing %>% compare(txhousing) %>% issues()
 #'   
-#'   # Getting issues from specific variable
-#'   txhousing %>% diagnose() %>% issues("inventory", verbose = TRUE)
-#'   txhousing %>% compare(sample_n(txhousing, 20)) %>% issues(1, verbose = TRUE)
+#' # Getting issues from specific variable
+#' txhousing %>% diagnose() %>% issues("inventory", verbose = TRUE)
+#' txhousing %>% compare(sample_n(txhousing, 20)) %>% issues(1, verbose = TRUE)
 #' }
 #' 
 #' @export

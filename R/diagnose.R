@@ -10,20 +10,20 @@
 #'   created (you can access them with \code{issues()})
 #' 
 #' @param X Table to run tests on
-#' @param exams Tests to be run on X (see \code{vignette
-#'   ("doctr_diagnose")} for more information)
+#' @param exams Tests to be run on \code{X} (see \code{vignette("doctr_diagnose")}
+#'   for more information)
 #' 
 #' @examples
 #' \dontrun{
-#'   library(tidyverse)
+#' library(tidyverse)
 #'   
-#'   # Running default diagnostics on a table
-#'   txhousing %>% diagnose() %>% issues()
+#' # Running default diagnostics on a table
+#' txhousing %>% diagnose() %>% issues()
 #'   
-#'   # Running custom diagnostics on a table
-#'   exams <- guess_exams(txhousing)
-#'   exams$max_val[5] <- 2000000000
-#'   txhousing %>% diagnose(exams) %>% issues(verbose = TRUE)
+#' # Running custom diagnostics on a table
+#' exams <- guess_exams(txhousing)
+#' exams$max_val[5] <- 2000000000
+#' txhousing %>% diagnose(exams) %>% issues(verbose = TRUE)
 #' }
 #' 
 #' @export

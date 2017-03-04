@@ -16,13 +16,13 @@
 #' 
 #' @examples
 #' \dontrun{
-#'   library(tidyverse)
+#' library(tidyverse)
 #'   
-#'   # Comparing a table to itself
-#'   txhousing %>% compare(txhousing) %>% issues()
+#' # Comparing a table to itself
+#' txhousing %>% compare(txhousing) %>% issues()
 #'   
-#'   # Comparing two different tables
-#'   txhousing %>% compare(sample_n(txhousing, 20)) %>% issues(verbose = TRUE)
+#' # Comparing two different tables
+#' txhousing %>% compare(sample_n(txhousing, 20)) %>% issues(verbose = TRUE)
 #' }
 #' 
 #' @export
