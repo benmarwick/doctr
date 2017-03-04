@@ -25,12 +25,12 @@ This function samples 20\% of \code{X} and tries to roughly identify
 }
 \examples{
 \dontrun{
-  library(tidyverse)
+library(tidyverse)
   
-  # Running custom diagnostics on a table
-  exams <- guess_exams(txhousing)
-  exams$max_val[5] <- 2000000000
-  txhousing \%>\% diagnose(exams) \%>\% issues(verbose = TRUE)
+# Running custom diagnostics on a table
+exams <- guess_exams(txhousing)
+exams$max_val[5] <- 2000000000
+txhousing \%>\% diagnose(exams) \%>\% issues(verbose = TRUE)
 }
 
 }

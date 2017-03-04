@@ -24,17 +24,17 @@ This function determines the types of the variables in
 }
 \examples{
 \dontrun{
-  library(tidyverse)
+library(tidyverse)
   
-  # Creating automated EDA from table
-  eda <- txhousing \%>\% examine()
+# Creating automated EDA from table
+eda <- txhousing \%>\% examine()
   
-  # Fetching EDA for numeric variables
-  report_num(eda)
+# Fetching EDA for numeric variables
+report_num(eda)
   
-  # Creating and fetching automated EDA with grouping
-  eda <- txhousing \%>\% examine("city")
-  report_num(eda, "Austin")
+# Creating and fetching automated EDA with grouping
+eda <- txhousing \%>\% examine("city")
+report_num(eda, "Austin")
 }
 
 }

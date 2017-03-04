@@ -1,3 +1,6 @@
+# Declaring global variables
+utils::globalVariables(c(".", "data", "n", "cnt", "unq"))
+
 #' Convert vector of types to corresponding functions
 #' 
 #' @param types vector with data types (money, count, etc.)

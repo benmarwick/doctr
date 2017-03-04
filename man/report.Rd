@@ -33,17 +33,17 @@ This function uses the result of \code{examine()}'s
 }
 \examples{
 \dontrun{
-  library(tidyverse)
+library(tidyverse)
   
-  # Getting EDA for numeric and text variables
-  txhousing \%>\% examine() \%>\% report_num()
-  txhousing \%>\% examine() \%>\% report_chr()
+# Getting EDA for numeric and text variables
+txhousing \%>\% examine() \%>\% report_num()
+txhousing \%>\% examine() \%>\% report_chr()
   
-  # Getting EDA with grouping (of a factor variable)
-  txhousing \%>\%
-    mutate(city = as.factor(city)) \%>\%
-    examine(1) \%>\%
-    report_fct("Austin")
+# Getting EDA with grouping (of a factor variable)
+txhousing \%>\%
+  mutate(city = as.factor(city)) \%>\%
+  examine(1) \%>\%
+  report_fct("Austin")
 }
 
 }
