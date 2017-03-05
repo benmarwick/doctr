@@ -4,7 +4,7 @@
 
 The goal of this package is automating as much as possible the task of
 verifying if everything is ok with a dataset. Like a real doctor, it has
-functions for examining, diagnosing and assessing it's "patients'"
+functions for examining, diagnosing and assessing its "patients'"
 progress over time.
 
 You can download `doctr` by running
