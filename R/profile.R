@@ -48,7 +48,7 @@ profile_num <- function(x) {
 #' Create profile for column of characters
 #' 
 #' @param x List with data of a column
-profile_chr <- function(x) {
+profile_txt <- function(x) {
   x$len <- length(x$data)
   
   str_len <- suppressWarnings(stringr::str_length(x$data))
@@ -118,7 +118,7 @@ profile <- function(X) {
       class(X[[i]]$data),
       numeric = profile_num(X[[i]]),
       integer = profile_num(X[[i]]),
-      character = profile_chr(X[[i]]),
+      character = profile_txt(X[[i]]),
       factor = profile_fct(X[[i]])
     )
   }

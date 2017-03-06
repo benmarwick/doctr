@@ -16,7 +16,7 @@ check_len <- function(x, len) {
 #' @param x List with data, result, and any errors already found
 #' @param type x$data should have
 check_type <- function(x, type) {
-  if (stringr::str_detect(class(x$data), type)) {
+  if (!stringr::str_detect(type, class(x$data))) {
     x$type <- paste0("Data isn't of type ", type)
     x$result <- FALSE
   }

@@ -20,7 +20,7 @@ examine_ <- function(X) {
       class(X[[i]]$data),
       numeric = suppressWarnings(profile_num(X[[i]])),
       integer = suppressWarnings(profile_num(X[[i]])),
-      character = suppressWarnings(profile_chr(X[[i]])),
+      character = suppressWarnings(profile_txt(X[[i]])),
       factor = suppressWarnings(profile_fct(X[[i]]))
     )
     
@@ -50,7 +50,7 @@ examine_ <- function(X) {
 #' @details This function determines the types of the variables in
 #'   \code{X} (numeric, text or factor) and creates a report
 #'   for each type of variable; these reports can be accessed
-#'   with \code{report_[num|chr|fct]()} and more information
+#'   with \code{report_[num|txt|fct]()} and more information
 #'   about these are available at \code{vignette("doctr_examine")}
 #' 
 #' @param X Table to be examined

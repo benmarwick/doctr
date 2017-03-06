@@ -19,7 +19,7 @@ Creates summary statistics for every column of \code{X}, varying
 This function determines the types of the variables in
   \code{X} (numeric, text or factor) and creates a report
   for each type of variable; these reports can be accessed
-  with \code{report_[num|chr|fct]()} and more information
+  with \code{report_[num|txt|fct]()} and more information
   about these are available at \code{vignette("doctr_examine")}
 }
 \examples{

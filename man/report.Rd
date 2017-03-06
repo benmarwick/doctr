@@ -3,13 +3,13 @@
 \name{report}
 \alias{report}
 \alias{report_num}
-\alias{report_chr}
+\alias{report_txt}
 \alias{report_fct}
 \title{Fetch EDA of a specific type of column}
 \usage{
 report_num(res, group = "")
 
-report_chr(res, group = "")
+report_txt(res, group = "")
 
 report_fct(res, group = "")
 }
@@ -37,7 +37,7 @@ library(tidyverse)
   
 # Getting EDA for numeric and text variables
 txhousing \%>\% examine() \%>\% report_num()
-txhousing \%>\% examine() \%>\% report_chr()
+txhousing \%>\% examine() \%>\% report_txt()
   
 # Getting EDA with grouping (of a factor variable)
 txhousing \%>\%

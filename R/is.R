@@ -41,7 +41,7 @@ is_continuous <- function(x, min_val = -Inf, max_val = Inf, max_na = 0.9, max_de
   
   x <- x %>%
     check_len(0) %>%
-    check_type("numeric ou integer") %>%
+    check_type("numeric or integer") %>%
     check_max_na(max_na, TRUE) %>%
     check_mdp(max_dec_places) %>%
     check_max_val(max_val) %>%

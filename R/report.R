@@ -20,7 +20,7 @@
 #'   
 #' # Getting EDA for numeric and text variables
 #' txhousing %>% examine() %>% report_num()
-#' txhousing %>% examine() %>% report_chr()
+#' txhousing %>% examine() %>% report_txt()
 #'   
 #' # Getting EDA with grouping (of a factor variable)
 #' txhousing %>%
@@ -46,7 +46,7 @@ report_num <- function(res, group = "") {
 #' @rdname report
 #' 
 #' @export
-report_chr <- function(res, group = "") {
+report_txt <- function(res, group = "") {
   if (group == "") {
     return(tibble::as_tibble(res[[2]]))
   }

@@ -1,7 +1,7 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
-date: "`r Sys.Date()`"
+title: "EDA automation with doctr"
+author: "Caio Lente"
+date: "2017-03-06"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -9,50 +9,110 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
-
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
-
-## Vignette Info
-
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r, echo = FALSE, message = FALSE}
+library(tidyverse)
+library(doctr)
+data(mpg)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+## About
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+`doctr` is an R package that helps you check the consistency and the
+quality of data.
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+The goal of the package is, in other words, automating as much as
+possible the task of verifying if everything is ok with a dataset.
+Like a real doctor, it has functions for examining, diagnosing and
+assessing its "patients'" progress over time.
 
-## More Examples
+Since `doctr` was created with the [Tidy Tools Manifesto](https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html) in mind,
+it works perfectly alongiside the [tidyverse](https://github.com/tidyverse).
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+## Exploring datasets with doctr
 
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+One of `doctr`'s main fuctions is `examine()`, which gets the
+summary statistics for every column of a table, varying the
+summarization strategy depending on the type of variable.
+
+After running `examine()`, we can use the `report_*()`
+family of functions to get the different types of reports back.
+
+Let's see how this works with an example dataset: `ggplot2::mpg`.
+For the sake of this example, I'm going to transform the `class`
+column into a factor.
+
+```{r}
+# Converting class to factor
+mpg$class <- as.factor(mpg$class)
 ```
 
-Also a quote using `>`:
+Now we have 3 main types of variables represented in this table: numeric,
+text and factor. When we run `examine()`, the function is going to treat
+each column differently depending on in which of these groups it fits; if it
+can't classify the column, `examine()` always defaults to text.
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+```{r}
+# Creating the EDA
+eda <- examine(mpg)
+```
+
+With the `eda` object we can get all 3 exploratory analyses.
+
+```{r}
+# Get report of numeric variables
+report_num(eda)
+
+# Get report of text variables
+report_txt(eda)
+
+# Get report of factor variables
+report_fct(eda)
+```
+
+The tables produced are very wide, so I won't show them here in their integrity, but
+the names of the columns in the reports are codes for each summary
+statistic; here's what each of them mean and in which reports they
+come up:
+
+| column | numeric | text | factor | description |
+|--|:--:|:--:|:--:|--|
+| `name` | x | x | x | name of the variable |
+| `min`, `max` | x | x |  | minimum and maximum value/length |
+| `1%`, ..., `99%` | x | x |  | value/length percentiles |
+| `mean` | x | x |  | mean value/length |
+| `sd` | x | x |  | value/length standard deviation |
+| `na`, `val` | x | x |  | percentage of missing and non-missing entries |
+| `neg`, `zero`, `pos` | x |  |  | percentage of negative, zero and positive values |
+| `unq` | x | x |  | count of unique values/texts |
+| `mdp` | x |  |  | maximum number of decimal places |
+| `asc` |  | x |  | equals 1 if the text is identified as ASCII |
+| `ltr`, `num` |  | x |  | percentage of text that is identified as letters and numbers |
+| `data` |  |  | x | each factor level |
+| `cnt`, `frq` |  |  | x | count and frequency of each level |
+
+### Grouping
+
+Like with a `group_by()` statement, it is also possible to divide the
+table before getting the EDA. We do this with the `group` argument of the
+`examine()` function and then collect the results with the same argument of
+the `report_*()` family.
+
+```{r}
+# Creating the EDA (grouped by the class variable)
+eda <- examine(mpg, group = "class")
+```
+
+For `examine()`, `group` receives the name or index of a column.
+When collecting the reports, `group` receives the level of the
+grouped variable from which we want the results.
+
+```{r}
+# Get report of numeric variables for compact cars
+report_num(eda, group = "compact")
+
+# Get report of text variables for SUVs
+report_txt(eda, group = "suv")
+
+# Get report of factor variables for midsize cars
+report_fct(eda, group = "midsize")
+```
