@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/ctlente/doctr.svg?branch=master)](https://travis-ci.org/ctlente/doctr)
-
-# doctr
+# doctr [![Build Status](https://travis-ci.org/ctlente/doctr.svg?branch=master)](https://travis-ci.org/ctlente/doctr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/ctlente/doctr?branch=master&svg=true)](https://ci.appveyor.com/project/ctlente/doctr)
 
 `doctr` is an R package that helps you check the consistency and the
 quality of data.
