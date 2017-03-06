@@ -36,6 +36,8 @@ summarization strategy depending on the type of variable.
 
 After running `examine()`, we can use the `report_*()`
 family of functions to get the different types of reports back.
+`report_num()` is used for numeric varibales, `report_txt()` for
+text variables and `report_fct()` for factor variables.
 
 Let's see how this works with an example dataset: `ggplot2::mpg`.
 For the sake of this example, I'm going to transform the `class`
@@ -59,13 +61,13 @@ eda <- examine(mpg)
 With the `eda` object we can get all 3 exploratory analyses.
 
 ```{r}
-# Get report of numeric variables
+# Getting report of numeric variables
 report_num(eda)
 
-# Get report of text variables
+# Getting report of text variables
 report_txt(eda)
 
-# Get report of factor variables
+# Getting report of factor variables
 report_fct(eda)
 ```
 
@@ -107,12 +109,12 @@ When collecting the reports, `group` receives the level of the
 grouped variable from which we want the results.
 
 ```{r}
-# Get report of numeric variables for compact cars
+# Getting report of numeric variables for compact cars
 report_num(eda, group = "compact")
 
-# Get report of text variables for SUVs
+# Getting report of text variables for SUVs
 report_txt(eda, group = "suv")
 
-# Get report of factor variables for midsize cars
+# Getting report of factor variables for midsize cars
 report_fct(eda, group = "midsize")
 ```

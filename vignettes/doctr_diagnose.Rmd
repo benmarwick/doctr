@@ -50,8 +50,96 @@ errors.
 
 ```{r}
 # Getting summary of diagnostics
-issues(diagnostics, verbose = TRUE)
+issues(diagnostics)
 ```
 
 Since `mpg` is already very well-formed, no issues were found. I'm going
-to artificially 
+to artificially break the table so we can see what issues look like (I'm
+also turning `verbose` on so the function shows exactly what the issues were).
+
+```{r}
+# Manually breaking mpg
+mpg2 <- mpg %>%
+  mutate(year = as.Date(year, origin = "1970-01-01"))
+
+# Getting summary of diagnostics
+mpg2 %>% diagnose() %>% issues(verbose = TRUE)
+```
+
+As we can see, `diagnose()` was able to parse `year`, but it alerted us
+that it isn't a character variable.
+
+### Creating custom exams
+
+`diagnose()` by default uses a function called `guess_exams()` to generate
+the exams it is going to run on a given table. This special function
+grabs a sample of the table and tries to assign each of its variables to
+one of the types below (from most to least restrictive):
+
+* `percentage`: must be only numeric values between 0 and 1
+* `money`: must be positive values and have at most 2 decimal places
+* `count`: must be positive integers
+* `quantity`: must be positive values
+* `continuous`: must be numeric values
+* `categorical`: must be factors
+* `character`: must be text
+
+If you run `guess_exams()` by yourself, you can customize the exams it
+generates and then pass them as an argument to `diganose()` so that it uses
+you custom exams.
+
+Let's see how this works in practice.
+
+```{r}
+exams <- guess_exams(mpg)
+```
+
+```{r, echo = FALSE}
+knitr::kable(exams)
+```
+
+Each columns in `exams` can be filled with a parameter that is going to be
+used by `diagnose()` to find problems in `mpg`. These are the meanings of these
+parameters and to what variable types they apply (for more information on
+types, run `vignette(doctr_examine)`):
+
+| parameter | numeric | text | factor | description |
+|--|:--:|:--:|:--:|--|
+| `funs` | x | x | x | which type should be used for base exams (`percentage`, `money`, etc.) |
+| `max_na` | x | x | x | maximum % of NAs |
+| `min_val`, `max_val` | x |  |  | minimum and maximum values |
+| `max_dec_places` | x |  |  | maximum number of decimal places |
+| `min_unq`, `max_unq` |  | x | x | minimum and maximum number of unique classes |
+| `least_freq_cls` |  | x | x | minimum % of the total a class can represent |
+
+Let's customize these exams and use them with `diagnose()`.
+
+```{r}
+# Setting some arbritraty maximum and minimum values
+exams$max_val[8] <- 30
+exams$min_val[9] <- 15
+
+# Setting least frequent class
+exams$least_frec_cls[10] <- 0.2
+
+# Setting maximum unique classes
+exams$max_unq[1] <- 10
+
+# Use custom exams to diagnose table
+mpg %>% diagnose(exams) %>% issues()
+```
+
+Using the `i` parameter of `issues()` paired with `verbose`,
+we can pass the name or index of a column  only the issues
+associated with it.
+
+```{r}
+# Use custom exams to diagnose table
+diagnostics <- diagnose(mpg, exams)
+
+# Get results for 1st column
+issues(diagnostics, i = 1, verbose = TRUE)
+
+# Get results for fl column
+issues(diagnostics, i = "fl", verbose = TRUE)
+```
