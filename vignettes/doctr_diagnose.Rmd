@@ -130,8 +130,8 @@ mpg %>% diagnose(exams) %>% issues()
 ```
 
 Using the `i` parameter of `issues()` paired with `verbose`,
-we can pass the name or index of a column  only the issues
-associated with it.
+we can pass the name or index of a column in order to get only
+the issues associated with it.
 
 ```{r}
 # Use custom exams to diagnose table
