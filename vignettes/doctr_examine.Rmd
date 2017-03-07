@@ -77,7 +77,7 @@ statistic; here's what each of them mean and in which reports they
 come up:
 
 | column | numeric | text | factor | description |
-|--|:--:|:--:|:--:|--|
+|---|:---:|:---:|:---:|---|
 | `name` | x | x | x | name of the variable |
 | `min`, `max` | x | x |  | minimum and maximum value/length |
 | `1%`, ..., `99%` | x | x |  | value/length percentiles |
