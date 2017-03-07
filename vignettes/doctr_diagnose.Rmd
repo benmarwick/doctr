@@ -104,7 +104,7 @@ parameters and to what variable types they apply (for more information on
 types, run `vignette(doctr_examine)`):
 
 | parameter | numeric | text | factor | description |
-|--|:--:|:--:|:--:|--|
+|---|:---:|:---:|:---:|---|
 | `funs` | x | x | x | which type should be used for base exams (`percentage`, `money`, etc.) |
 | `max_na` | x | x | x | maximum % of NAs |
 | `min_val`, `max_val` | x |  |  | minimum and maximum values |
