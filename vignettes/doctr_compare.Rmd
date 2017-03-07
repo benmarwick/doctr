@@ -30,10 +30,10 @@ it works perfectly alongiside the [tidyverse](https://github.com/tidyverse).
 
 ## Comparing datasets with doctr
 
-One of `doctr`'s main fuctions is `compare()`, which
+One of `doctr`'s main functions is `compare()`, which
 compares the profiles of two tables, checking if they can be
-considered similar enough. This is very usefull when we're
-dealing with the evoloution of a table over time, e.g.
+considered similar enough. This is very useful when we're
+dealing with the evolution of a table over time, e.g.
 we receive some data gathered in January and then some data
 gathered in February.
 
@@ -81,8 +81,9 @@ see `vignette("doctr_examine")`) and if that specific value was considered
 too low or too high; here's what each of these codes mean and for which
 types of variables they come up:
 
+
 | column | numeric | text | factor | description |
-|--|:--:|:--:|:--:|--|
+|---|:---:|:---:|:---:|---|
 | `min`, `max` | x | x |  | minimum and maximum value/length |
 | `1%`, ..., `99%` | x | x |  | value/length percentiles |
 | `mean` | x | x |  | mean value/length |
@@ -95,6 +96,7 @@ types of variables they come up:
 | `ltr`, `num` |  | x |  | percentage of text that is identified as letters and numbers |
 | `data` |  |  | x | each factor level |
 | `cnt`, `frq` |  |  | x | count and frequency of each level |
+
 
 It is also possible to make the comparison more or less sensitive with different `ci`
 (confidence intervals) values.
