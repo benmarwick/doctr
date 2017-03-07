@@ -95,7 +95,7 @@ is_categorical <- function(x, min_unq = 0, max_unq = Inf, max_na = 0.9, least_fr
   
   x <- x %>%
     check_len(0) %>%
-    check_type("character") %>%
+    check_type("factor") %>%
     check_max_na(max_na, TRUE) %>%
     check_min_unq(min_unq) %>%
     check_max_unq(max_unq) %>%

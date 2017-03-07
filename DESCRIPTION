@@ -24,7 +24,8 @@ Suggests:
   tidyverse,
   knitr,
   rmarkdown,
-  covr
+  covr,
+    testthat
 Collate:
   'misc.R'
   'report.R'
