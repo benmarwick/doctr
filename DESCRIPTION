@@ -2,8 +2,7 @@ Package: doctr
 Title: An R Package to Help Check Data Consistency
 Version: 0.2.0.9000
 Authors@R: c(person("Caio", "Lente", email = "me@ctlente.com", role = c("cre", "aut")), person("Daniel", "Falbel", email = "dfalbel@gmail.com", role = c("aut")))
-Description:
-  doctr is an R package that helps you check the consistency and the
+Description: doctr is an R package that helps you check the consistency and the
   quality of data. Like a real doctor, it has functions for examining,
   diagnosing and assessing its "patients'" progress over time.
 URL: https://github.com/ctlente/doctr
